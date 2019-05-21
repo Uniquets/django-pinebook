@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="zh-CN" class="translated-ltr">
+<head>
+    <meta charset="UTF-8">
+    <title>{% block title %}Base{% endblock %}</title>
+    <link rel="stylesheet" href="/static/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/static/css/base.css">
+    <link rel="icon" href="/static/blog/img/icon.jpg" type="image/jpg">
+    <link rel="stylesheet" href="/static/iconfont/iconfont.css">
+    <script src="/static/jquery/dist/jquery.min.js"></script>
+    <script src="/static/bootstrap/js/bootstrap.min.js"></script>
+    <script src="/static/layer/layer.js"></script>
+    <style>
+    </style>
+</head>
+<body>
+<div id="top">
+{% block top %}
+ <div class="w">
+     <img  src="/static/blog/img/icon.jpg" id="icon" alt="icon">
+{% if username %}
+     <span class="col-12" style="font-size: 13px;color: #4e555b;">
+         <p  style="display: inline-block;height: 25px;vertical-align: top;margin-right: 5px">当前用户:{{username}}</p>
+         <a  href="{% url 'logout' %}" style="line-height: 35px;font-size: 12px;float: right">注销</a></a>
+         </span>
+{% else %}
+    <span style="font-size: small;color: #4e555b">您当前是游客身份，只能浏览，要借阅书籍，请
+        <a style="color: crimson" id="login" href="#"> 登陆 </a>或<a style="color: crimson" href="{% url 'register' %}"> 注册 </a></span>
+{% endif %}
+ </div>
+{% endblock %}
+</div>
+<div  id="logo" style="height: 80px"></div>
+{% block content %}{% endblock %}
+<!--<div id="loginbox" style="display:none">
+<form id="logfm" method="post" action="{% url 'index' %}">
+    {% csrf_token %}
+    <div>
+        {{ loginform.username.label_tag }}
+        {{ loginform.username }}
+            <span id="username_span"></span>     &lt;!&ndash; 接收错误信息里的user的错误信息 &ndash;&gt;
+    </div>
+    <div>
+        {{ loginform.password.label_tag }}
+        {{ loginform.password }}
+            <span id="password_span"></span>     &lt;!&ndash; 接收错误信息里的password的错误信息 &ndash;&gt;
+    </div>
+    <div>
+        <span id="other_span"></span>   &lt;!&ndash;提示用户名或密码错误&ndash;&gt;
+    </div>
+</form>
+<p><a href="">忘记密码</a></p>
+</div>-->
+<script>
+    state = 0  /*表示当前选中的导航项目，0同校书架，1同城书架，2个人中心*/
+    $("#login").click(function(){
+        console.log("click")
+        var login_form = '<div id="loginbox">'+
+            '<form id="logfm">'+
+            '{% csrf_token %}'+
+            '<div>'+
+            '{{ loginform.username.label_tag }}'+
+            '{{ loginform.username }}'+
+            '<span id="username_span"></span><!-- 接收错误信息里的user的错误信息 -->'+
+            '</div>'+
+            '<div>'+
+            ' {{ loginform.password.label_tag }}'+
+            ' {{ loginform.password }}'+
+            '<span id="password_span"></span><!-- 接收错误信息里的password的错误信息 -->'+
+            '</div>'+
+            '<div>'+
+            '<span id="other_span"></span><!--提示用户名或密码错误-->'+
+            '</div>'+
+            '</form>'+
+            '</div>'
+            layer.open({
+            type: 1,
+            content:login_form,
+            btn:["登陆"],
+            yes:function(index){
+                    $.ajax({
+                     url:"/"
+                    ,type:"post"
+                    ,dataType:"JSON"
+                    ,data:$("#logfm").serialize()
+                    ,success:function(args){
+                        if (args.status == "OK"){
+                            console.log(args)
+                            window.location = "{% url 'index' %}"
+                                                }
+                        else if(args.status=="ERROR"){
+                            console.log(args)
+                            if(args.msg.other){
+                                $("#other_span").html(args.msg.other)
+                                $("#username_span").html("")
+                                $("#password_span").html("")
+                                                }
+                            else
+                                {$("#other_span").html("")
+                                $("#username_span").html(args.msg.username)
+                                $("#password_span").html(args.msg.password)
+                                }
+                                                    }
+                                          }
+                        })
+                            }
+            })
+                                }
+    )
+
+</script>
+{% block script %} {% endblock %}
+</body>
+</html>

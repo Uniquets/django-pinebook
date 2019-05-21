@@ -1,0 +1,48 @@
+{% extends 'base.html'%}
+{% block title %}用户注册{% endblock %}
+{% block content %}
+    <div id="registerbox">
+    <form id="regfm">
+    {% csrf_token %}
+        {% for field in regform %}
+            <div id = {{field.html_name}}>{{field.label}}{{field}}<span class = "regerror"></span></div>
+        {% endfor %}
+    <div>
+        <a id="register">注册</a>
+    </div>
+    </form>
+    </div>
+{% endblock %}
+{% block script %}
+<script>
+    console.log($("#register"))
+    $("#register").click(function()
+        {
+            console.log($("#regfm").serialize())
+            $.ajax({
+                url:"/register/"
+                ,type:"post"
+                ,dataType:"JSON"
+                ,data:$("#regfm").serialize()
+                ,success:function(args){
+                    console.log(args.status)
+                    if(args.status == "OK"){
+                        layer.msg("注册成功，将转到主页")
+                        window.location = "{% url 'index' %}"
+                    }
+                    else {
+                        $("#city .regerror").html(args.errors.city ? args.errors.city : "")
+                        $("#email .regerror").html(args.errors.email ? args.errors.email : "")
+                        $("#password .regerror").html(args.errors.password ? args.errors.password : "")
+                        $("#school .regerror").html(args.errors.school ? args.errors.school : "")
+                        $("#surepassword .regerror").html(args.errors.surepassword ? args.errors.surepassword : "")
+                        $("#telephone .regerror").html(args.errors.telephone ? args.errors.telephone : "")
+                        $("#username .regerror").html(args.errors.username ? args.errors.username : "")
+                    }
+
+                }
+            })
+        }
+    )
+        </script>
+{% endblock %}
