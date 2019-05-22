@@ -107,6 +107,12 @@ AUTH_PASSWORD_VALIDATORS = [
         'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
     },
 ]
+EMAIL_HOST = 'smtp.qq.com'                 #SMTP地址
+EMAIL_PORT = 25                             #SMTP端口
+EMAIL_HOST_USER = '1170998607@qq.com'     #我自己的邮箱
+EMAIL_HOST_PASSWORD = 'fueztdmsvyzyjabg'        #我的邮箱密码
+EMAIL_USE_TLS = True                       #与SMTP服务器通信时，是否启动TLS链接(安全链接)。默认是false
+EMAIL_FROM = '1170998607@qq.com'          #发件人
 
 
 # Internationalization

@@ -45,13 +45,10 @@
 
     <div id = "mainContent">
         <div class="w">
-
-        <div id="rightContent">
             <div id="bookRack" style="display: none">
                 <div id="bookbox">
                 </div>
             </div>
-        </div>
         </div>
     </div>
 {% endblock %}
@@ -129,7 +126,7 @@
                 再给这些元素添加onclick事件，点击打开一个layer用于展示这本书的详细信息*/
             $("#bookbox").empty()
             for(var book in books){
-                var ele = $("<div class='books' data-bookid="+book+"></div>")
+                var ele = $("<div class='books card' data-bookid="+book+"></div>")
                 var name = $(buildHTML("p",books[book].name,{
                         "class": "name-rack"
                  }));
@@ -138,11 +135,12 @@
                  }));
                 var cover = $(buildHTML("img",{
                     "src":"/static/covers/"+books[book].cover,
-                    "class": "covers-rack"
+                    "class": "covers-rack card-img-top"
                  }))
                 ele.append(cover);
                 ele.append(name);
                 ele.append(author);
+
                 ele.click(
                     (function(id){
                     var bookid=id;

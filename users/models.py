@@ -14,11 +14,11 @@ from django.contrib.auth.models import User
 class Reader(models.Model):
     user = models.OneToOneField(User,on_delete=models.CASCADE, related_name="profile",null=False)
     #扩展User，on_delete删除关联数据,与之关联也删除，related_name自定义外键名
-    sex = models.CharField(max_length=5,null=False)
+    sex = models.CharField(max_length=5)
     telephone = models.CharField(max_length=11,null=False)
     city = models.CharField(max_length=30,null=False)
     school = models.CharField(max_length=80,null=False)
-    grade = models.CharField(max_length=20,null=False,default="2015")
+    grade = models.CharField(max_length=20,default="2015")
 
     class Meta:   #Meta详解   https://www.cnblogs.com/flash55/p/6265405.html
         verbose_name = '读者'

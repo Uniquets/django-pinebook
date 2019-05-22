@@ -14,5 +14,6 @@ urlpatterns = [
     url(r'^showbook/$',views.showbook,name = "showbook"),
     url(r'^logout/$', views.logout,name="logout"),
     url(r'^register/$',views.register,name="register"),
-    url(r'^personal/$',views.personal,name='personal')
+    url(r'^personal/$',views.personal,name='personal'),
+    url(r'^register/sendemail/$',views.sendemail,name='register_sendemail')
 ]

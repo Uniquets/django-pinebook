@@ -1,21 +1,94 @@
 {% extends 'base.html'%}
 {% block title %}用户注册{% endblock %}
+{% block style %}
+<style>
+    #registerbox {
+        text-align: left;
+    }
+    #regfm {
+        width: 600px;
+        margin: 0 auto;
+    }
+    #regfm>div {
+        display: flex;
+        margin-top: 15px;
+        align-items:baseline;
+    }
+    .regerror {
+        font-size: 13px;
+        color: orangered;
+        display: block;
+        height: 20px;
+        text-align: left;
+    }
+</style>
+{% endblock%}
 {% block content %}
     <div id="registerbox">
+        <div style="margin: auto;">
+            <h1 style="margin: 0 auto 50px;text-align: center">用户注册</h1>
     <form id="regfm">
     {% csrf_token %}
         {% for field in regform %}
-            <div id = {{field.html_name}}>{{field.label}}{{field}}<span class = "regerror"></span></div>
+            <div id={{field.name}} class = "col-14"><b style="font-weight:600;text-align: center;line-height: 40px"class="col-4">{{field.label_tag}}</b>{{field}}<span class = "regerror col-3"></span></div>
         {% endfor %}
-    <div>
-        <a id="register">注册</a>
+        <div id="vcode" class="col-14">
+            <p class="col-4" style="font-weight:600;text-align: center;line-height: 40px">邮箱验证码:</p>
+            <div class="col-4">
+            <input class="form-control" type="text" placeholder="请填写四位数验证码" name="vcode">
+                <p class="regerror" style="margin-top: 2px;text-align: center"></p>
+            </div>
+            <div class="col-1"></div>
+            <button type="button" id="getVcode" class="col-3 btn btn-dark">点击获取验证码</button>
+        </div>
+    <div style="justify-content: center;margin-top: 50px">
+        <button type="button" class="btn btn-outline-success col-6" id="register">确认提交</button>
     </div>
     </form>
+        </div>
     </div>
 {% endblock %}
 {% block script %}
 <script>
-    console.log($("#register"))
+    function  getVcode() {
+            console.log(11)
+            var Email = $("[name='email']").val();
+            if(Email==""){
+                alert("请先填写邮箱");
+                return;
+            }
+            var reg = /^[\w\.]+@[\w\.]+(\.\w+)+$/;
+            if(!reg.test(Email)){
+                alert("邮箱格式错误");
+                return;
+            }
+            $("#getVcode").attr('disabled',true);
+            $("#getVcode").css('color','#999cb1');
+            var time = 60;
+            var timer = setInterval(function(){
+                if(time>0){
+                    $("#getVcode").text('('+time+'s)重新发送');
+                    time--;
+                }else{
+                    $("#getVcode").text('获取验证码').removeAttr('disabled');
+                    $("#getVcode").css('color','black');
+                    clearInterval(timer);
+                }
+            },1000);
+            $.ajax({
+                url: "{% url 'register_sendemail' %}",
+                type: 'POST',
+                dataType: 'json',
+                data:{'Email':Email,'csrfmiddlewaretoken':'{{csrf_token}}'},
+                success:function(data){
+                    status = data.status;
+                },
+                error:function(){
+                    alert('服务器超时，请重试！');
+                }
+            });
+        };
+    $("#getVcode").click(function (){getVcode()})
     $("#register").click(function()
         {
             console.log($("#regfm").serialize())
@@ -31,6 +104,7 @@
                         window.location = "{% url 'index' %}"
                     }
                     else {
+                        console.log(args.errors)
                         $("#city .regerror").html(args.errors.city ? args.errors.city : "")
                         $("#email .regerror").html(args.errors.email ? args.errors.email : "")
                         $("#password .regerror").html(args.errors.password ? args.errors.password : "")
@@ -38,6 +112,7 @@
                         $("#surepassword .regerror").html(args.errors.surepassword ? args.errors.surepassword : "")
                         $("#telephone .regerror").html(args.errors.telephone ? args.errors.telephone : "")
                         $("#username .regerror").html(args.errors.username ? args.errors.username : "")
+                        $("#vcode .regerror").html(args.verify ? args.verify : "")
                     }
 
                 }

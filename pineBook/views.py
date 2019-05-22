@@ -7,8 +7,14 @@ from django.contrib import auth
 from django.http import HttpResponseRedirect,JsonResponse
 from django.contrib.auth.models import User
 from django.core import serializers
+from django.core.mail import send_mail
 import json
+import uuid
 
+
+
+vcode_changepwd = {}
+vcode_register = {}
 
 def homepage(request):
     print('emter')
@@ -98,7 +104,6 @@ def getrack(request):
 def showbook(request):
     if request.method == 'GET' and request.GET.get('id'):
         temp = Book.objects.get(id=request.GET.get('id'))
-
         book = {
             'name': temp.name,
             'owner': Reader.objects.get(id=temp.owner_id).user.username,
@@ -116,26 +121,22 @@ def logout(request):
     return HttpResponseRedirect('/')
 
 def register(request):
-    print(request.POST.get('email'))
+    print(vcode_register)
     if request.method == 'POST':
         ret = {"status": "ERROR", "errors": None}
         form = registerForm(request.POST)
-        print(request.POST)
-        print(form.errors)
-        if form.is_valid():
+        if form.is_valid() and request.POST.get('vcode') == vcode_register[request.POST.get('email')] and request.POST.get('vcode'):
             cd = form.cleaned_data
             user = User.objects.create_user(username=cd["username"], password=cd["password"], email=cd["email"])
             reader = Reader(user=user
-                            , sex=cd["sex"]
                             , telephone=cd["telephone"]
                             , city=cd["city"]
-                            , school=cd["school"]
-                            , grade=cd["grade"])
+                            , school=cd["school"])
             reader.save()
             ret["status"] = "OK"
         else:
+            ret["verify"] = "验证码错误，请重新输入"
             ret["errors"] = form.errors
-            print(type(form.errors))
         return JsonResponse(ret)
     else:
         form = registerForm()
@@ -143,5 +144,33 @@ def register(request):
 
 def personal(request):
     return Http404
+
+
+def sendemail(request):
+    print(request.path)
+    email = request.POST.get('Email', None)
+    vcode = uuid.uuid4().hex[:4]
+    message='尊敬的用户'+email+',您好：'\
+            +'\n您的验证码是：'+str(vcode)\
+            +'\n本邮件由系统自动发送，请勿直接回复！'\
+            +'\n感谢您的访问，祝您使用愉快！'
+    try:
+        user = User.objects.get(email=email)
+    except:
+        user = None
+    if not user and request.path=="/backpwd":
+        return JsonResponse({'status': '用户不存在!'})
+    res = send_mail(subject='pineBook--邮箱验证', message=message, from_email='松书<1170998607@qq.com>',recipient_list=[email], fail_silently=False)
+    context={}
+    if(res==0):
+        context = {'status': '失败'}
+    elif(res==1):
+        context = {'status': '成功'}
+        if(request.path=="/register/sendemail/"):
+            vcode_register[email]=vcode
+        elif(request.path=="/changepwd/sendemail"):
+            vcode_changepwd[email]=vcode
+    print(vcode_register)
+    return JsonResponse(context)
 
 

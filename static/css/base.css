@@ -76,29 +76,33 @@ a {
     transition: 0.1s;
     border-radius: 3px;
 }
-#rightContent {
+#mianContent {
     width: 600px;
 }
 
 .covers-rack {
-    transition: 0.3s;
     width: 110px;
     height: 150px;
 }
-.covers-rack:hover {
-    transition: 0.5s;
-    box-shadow: #b3d7ff 3px 3px 5px;
+.books:hover {
+    transition: 0.3s;
+    box-shadow: #202326 3px 3px 5px;
 }
 .name-rack {
     font-size: 14px;
+    margin-left: 10px;
 }
 .author-rack {
     font-size: 10px;
+    margin-left: 10px;
 }
 #bookbox {
     display: flex;
 }
 .books {
+    transition: 0.15s;
     margin: 10px 10px 0px 20px;
+    padding: 3px;
+    box-shadow: #202326 1px 1px 1px
 }
 
