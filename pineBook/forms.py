@@ -8,6 +8,7 @@ class loginForm(forms.Form):
         required="True"
         , max_length=18
         , label='用户名'
+        , widget = forms.TextInput(attrs={'class': 'form-control col-6', 'placeholder': '用户名'})
         , error_messages={
             'required': '用户名不能为空'
                                     })
@@ -15,7 +16,9 @@ class loginForm(forms.Form):
         required="True"
         ,max_length=18
         ,label='密码'
+        ,widget = forms.PasswordInput(attrs={'class': 'form-control col-6', 'placeholder': '密码'})
         ,error_messages={
+
             'required': '密码不能为空'
                                     })
 
@@ -91,3 +94,40 @@ class registerForm(forms.Form):
             raise forms.ValidationError("电话号码应为十一位数字")
             return tel
         return tel
+
+class userinfoForm(forms.Form):
+    username = forms.CharField(
+        label='用户名',
+        error_messages={'required': u'用户名不能为空'},
+        widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': '用户名'})
+    )
+    telephone = forms.CharField(
+        max_length=11,
+        label='电话号码',
+        widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': '11位电话号码'}),
+        error_messages={'required': u'电话号码不能为空'}
+    )
+    city = forms.ModelChoiceField(
+        error_messages={'required': u'请选择您所在的城市'},
+        label="城市",
+        queryset=City.objects.all(),
+        empty_label='请选择城市',
+        widget=forms.Select(attrs={'class': 'form-control'})
+    )
+    school = forms.ModelChoiceField(
+        error_messages={'required': u'请选择您所在的学校'},
+        label="学校",
+        queryset=School.objects.all(),
+        empty_label='请选择学校',
+        widget=forms.Select(attrs={'class': 'form-control'})
+    )
+
+    def clean_username(self):
+        username = self.cleaned_data.get('username')
+        if len(username) > 16:
+            raise forms.ValidationError("用户名应小于16个字符")
+        else:
+            filter_result = User.objects.filter(username__exact=username)
+            if len(filter_result) > 0:
+                raise forms.ValidationError("该用户名已被占用")
+        return username

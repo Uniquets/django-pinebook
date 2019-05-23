@@ -66,7 +66,8 @@ TEMPLATES = [
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
 
-                'pineBook.context_processor.initdata',
+                'pineBook.context_processor.initdata'
+
             ],
         },
     },

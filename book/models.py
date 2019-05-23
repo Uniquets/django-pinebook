@@ -32,9 +32,7 @@ class Book(models.Model):
     def __str__(self):
         return self.name
 
-    def toJSON(self):
-        import json
-        return json.dumps(dict([(attr, getattr(self, attr)) for attr in [f.__str__ for f in self._meta.fields]]))
+
 
 
 

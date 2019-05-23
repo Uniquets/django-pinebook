@@ -12,6 +12,30 @@
     <script src="/static/bootstrap/js/bootstrap.min.js"></script>
     <script src="/static/layer/layer.js"></script>
     <style>
+        #logfm>div{
+            display: flex;
+            flex-direction: row;
+            align-items: normal;
+            flex-wrap: wrap;
+            text-align: center;
+        }
+        #logfm>div>.col-4>label {
+            line-height: 35px;
+            font-weight: bold;
+        }
+        .loginerrors{
+            display: block;
+            height: 20px;
+            color: orangered;
+            font-size: 13px;
+            line-height: 10px;
+        }
+        .title {
+            font-size: 30px;
+            text-align: center;
+            margin: 30px;
+            font-weight: bold;
+        }
     </style>
 </head>
 <body>
@@ -19,9 +43,9 @@
 {% block top %}
  <div class="w">
      <img  src="/static/blog/img/icon.jpg" id="icon" alt="icon">
-{% if username %}
+{% if userdata %}
      <span class="col-12" style="font-size: 13px;color: #4e555b;">
-         <p  style="display: inline-block;height: 25px;vertical-align: top;margin-right: 5px">当前用户:{{username}}</p>
+         <p  style="display: inline-block;height: 25px;vertical-align: top;margin-right: 5px">当前用户 : {{userdata.用户名}}</p>
          <a  href="{% url 'logout' %}" style="line-height: 35px;font-size: 12px;float: right">注销</a></a>
          </span>
 {% else %}
@@ -57,54 +81,63 @@
     $("#login").click(function(){
         console.log("click")
         var login_form = '<div id="loginbox">'+
+                '<p class="title">用户登陆</p>'+
             '<form id="logfm">'+
             '{% csrf_token %}'+
             '<div>'+
-            '{{ loginform.username.label_tag }}'+
+            '<div class="col-4">{{ loginform.username.label_tag }}</div>'+
             '{{ loginform.username }}'+
-            '<span id="username_span"></span><!-- 接收错误信息里的user的错误信息 -->'+
+            '<span class="loginerrors col-12" id="username_span"></span><!-- 接收错误信息里的user的错误信息 -->'+
             '</div>'+
             '<div>'+
-            ' {{ loginform.password.label_tag }}'+
+            ' <div class="col-4">{{ loginform.password.label_tag }}</div>'+
             ' {{ loginform.password }}'+
-            '<span id="password_span"></span><!-- 接收错误信息里的password的错误信息 -->'+
+            '<span class="loginerrors col-12" id="password_span"></span><!-- 接收错误信息里的password的错误信息 -->'+
             '</div>'+
             '<div>'+
-            '<span id="other_span"></span><!--提示用户名或密码错误-->'+
+            '<span class="loginerrors  col-12" id="other_span" ></span><!--提示用户名或密码错误-->'+
             '</div>'+
             '</form>'+
             '</div>'
             layer.open({
-            type: 1,
-            content:login_form,
-            btn:["登陆"],
-            yes:function(index){
-                    $.ajax({
-                     url:"/"
-                    ,type:"post"
-                    ,dataType:"JSON"
-                    ,data:$("#logfm").serialize()
-                    ,success:function(args){
-                        if (args.status == "OK"){
-                            console.log(args)
-                            window.location = "{% url 'index' %}"
-                                                }
-                        else if(args.status=="ERROR"){
-                            console.log(args)
-                            if(args.msg.other){
-                                $("#other_span").html(args.msg.other)
-                                $("#username_span").html("")
-                                $("#password_span").html("")
-                                                }
-                            else
-                                {$("#other_span").html("")
-                                $("#username_span").html(args.msg.username)
-                                $("#password_span").html(args.msg.password)
-                                }
+                title:false,
+                skin:'layui-layer-molv',
+                area:['500px','320px'],
+                type: 1,
+                content:login_form,
+                btnAlign: 'c',
+                btn:["登陆","忘记密码"],
+                yes:function(index){
+                        $.ajax({
+                         url:"/"
+                        ,type:"post"
+                        ,dataType:"JSON"
+                        ,data:$("#logfm").serialize()
+                        ,success:function(args){
+                            if (args.status == "OK"){
+                                console.log(args)
+                                window.location = "{% url 'index' %}"
                                                     }
-                                          }
-                        })
-                            }
+                            else if(args.status=="ERROR"){
+                                console.log(args)
+                                if(args.msg.other){
+                                    $("#other_span").html(args.msg.other)
+                                    $("#username_span").html("")
+                                    $("#password_span").html("")
+                                                    }
+                                else
+                                    {$("#other_span").html("")
+                                    $("#username_span").html(args.msg.username)
+                                    $("#password_span").html(args.msg.password)
+                                    }
+                                                        }
+                                              }
+                            })
+                                },
+                btn2:function (index) {
+                    pass;
+                }
+
             })
                                 }
     )
