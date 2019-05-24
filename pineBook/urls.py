@@ -15,5 +15,6 @@ urlpatterns = [
     url(r'^logout/$', views.logout,name="logout"),
     url(r'^register/$',views.register,name="register"),
     url(r'^personal/$',views.personal,name='personal'),
-    url(r'^register/sendemail/$',views.sendemail,name='register_sendemail')
+    url(r'^register/sendemail/$',views.sendemail,name='register_sendemail'),
+    url(r'^searchuser/$',views.searchuser,name='searchuser')
 ]

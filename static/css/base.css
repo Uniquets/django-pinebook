@@ -68,13 +68,14 @@ a {
     color: midnightblue;
     cursor: pointer;
 }
-#friendsList li:hover{
+#slideContent li:hover{
     transition: 0.2s;
     background: #d3d9df;
 }
-#friendsList li {
+#slideContent li {
     transition: 0.1s;
     border-radius: 3px;
+    padding-left: 10px;
 }
 #mianContent {
     width: 600px;

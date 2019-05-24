@@ -11,7 +11,9 @@
        box-shadow: #4e555b 2px 2px 4px;
        width: 800px;
        margin-top: 20px;
-       border-radius: 20px;
+       margin-left: 20px;
+       border-radius: 10px;
+       padding: 20px;
    }
     #infoShow dt{
         text-align: center;
@@ -24,7 +26,13 @@
     #infoShow dl {
         display: flex;
         margin: 15px;
+        align-items: baseline;
     }
+    #booklayer {
+        display: flex;
+        flex-wrap: wrap;
+    }
+    #booklayer
 </style>
 {% endblock%}
 {% block content %}
@@ -50,7 +58,8 @@
                 <button class="btn btn-success" style="margin:0 35px;" onclick=slideFriends()>好友列表 <span class="iconfont icon-xiala"></span></button>
                 <div id="slideContent" style="border: #9fcdff 2px solid;padding:10px 8px 10px;margin: 5px 0;border-radius: 8px;background-color:darkseagreen;display: none;height: 500px;">
                     <div id="searchFriend" style="font-size: 12px;">
-                        <input type="text" placeholder="搜索用户名..." class="form-control" style="display: inline-block;width: 100px;font-size: 15px;">
+                        <input id="usersearch" type="text" placeholder="搜索用户名..." class="form-control" style="display: inline-block;width: 100px;font-size: 15px;">
+                        {% csrf_token%}
                         <input type="button" onclick="searchUser()" class="btn btn-outline-success" value="搜索" style="display:inline-block;width: 60px;vertical-align: bottom;">
                         <hr style="margin-bottom: 4px">
                     </div>
@@ -59,10 +68,11 @@
                         <li data-userid={{n.id}}> <span class="iconfont icon-yonghu"></span>  {{n.name}}</li>
                         {% endfor %}
                     </ul>
-                    <div id="searchList"style="display: none;">
+                    <div id="searchUser" style="display: none;">
                         <span  id="returnTofriend" onclick="backFriend()" class="iconfont icon-fanhui" style="margin-left: 110px;font-size: 13px">返回</span>
                         <p>搜索结果:</p>
-                    <ul>
+                    <ul id="searchList">
+
                     </ul>
                     </div>
                 </div>
@@ -88,13 +98,13 @@
                         {% for key,value in userdata.items %}
                     <hr>
                             {% if key == '个人标签' %}
-                                <dl class="col-12" style="display: flex"><dt class="col-2">{{key}}</dt>
+                                <dl class="col-12" style="display: flex"><dt class="col-2" style="margin-right: 50px">{{key}}</dt>
                                 {% for label in value %}
                                     <dd class="alert alert-primary">{{label}}</dd>
                                 {% endfor %}
                                     </dl>
                             {% else %}
-                                <dl class="col-12"><dt class="col-2">{{key}}</dt><dd class="col-6">{{value}}</dd></dl>
+                                <dl class="col-12"><dt class="col-2">{{key}}</dt><dd class="col-8">{{value}}</dd></dl>
                              {% endif %}
 
                     {% endfor %}
@@ -150,11 +160,26 @@
         }
         function searchUser() {
             $("#friendsList").css("display","none");
-            $("#searchList").css("display","block");
+            $("#searchUser").css("display","block");
+            $("#searchList").empty();
+            $.ajax({
+                url:"{% url 'searchuser'%}",
+                type:'POST',
+                datatype:'json',
+                data:{'searchtxt':$('#usersearch').val(),csrfmiddlewaretoken: '{{ csrf_token  }}'},
+                success:function (data) {
+
+                    for (u in data){
+                        l = $('<li data-userid='+u+'> <span class="iconfont icon-yonghu"></span>  '+data[u]+'</li>')
+                        $("#searchList").append(l)
+                    }
+
+                }
+                })
         }
         function backFriend() {
             $("#friendsList").css("display","block");
-            $("#searchList").css("display","none");
+            $("#searchUser").css("display","none");
         }
         function slideFriends() {
             $("#slideContent").slideToggle();
@@ -241,12 +266,12 @@
                     var booklayer = "<div id=\"booklayer\">\n" +
                         "<div id=\"title\"><p>"+book.name+"</p></div>\n" +
                         "<div id=\"author\"><p>"+book.author+"</p></div>\n" +
-                        "<div id=\"press\"><p>"+book.press+"</p></div>\n" +
-                        "<div id=\"cover\"><label>封面</label>" +
+                        "<div id=\"cover\">" +
                         "<img style='width: 30%;height: 30%;' " +
                         "src=\"/static/covers/"+book.cover+"\"alt=\"#\"></div>\n" +
+                        "<div id=\"press\"><p>"+book.press+"</p></div>\n" +
                         "<div id=\"intro\"><label>简介</label><p>"+book.intro+"</p></div>\n" +
-                        "<div id=\"owner\"><label>持有人</label><p>"+book.owner+"</p></div>\n" +
+                        "<div id=\"owner\" ><label>持有人</label><p>"+book.owner+"</p></div>\n" +
                         "<div id=\"position\"><label>所在地</label><p>"+book.city+"  "+book.school+"</p></div>\n" +
                         "</div>"
                     parent.layer.open(

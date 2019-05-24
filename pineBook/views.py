@@ -41,6 +41,16 @@ def homepage(request):
         ret["msg"] = form.errors
         return JsonResponse(ret)
 
+def searchuser(request):
+    if request.method == 'POST':
+        nametxt = request.POST.get('searchtxt')
+        resultlist = {}
+        for u in User.objects.filter(username__contains = nametxt):
+            resultlist[u.id] = u.username
+        print(resultlist)
+        return JsonResponse(resultlist)
+
+
 def getdict(books):    #将查询到的书集合转换为格式{id:{name:xxx,author:xxx}}的字典
     rackdic = {}
     books = serializers.serialize("json", books)
