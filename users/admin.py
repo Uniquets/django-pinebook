@@ -1,11 +1,19 @@
 from django.contrib import admin
 import users.models as user
-import book.models as book
+from friend.models import *
+
 
 admin.site.register(user.School)
 admin.site.register(user.Reader)
 admin.site.register(user.City)
-admin.site.register(book.Book)
-admin.site.register(book.Press)
-admin.site.register(book.Author)
+admin.site.register(user.Userleaveboard)
+admin.site.register(user.Label)
+admin.site.register(Book)
+admin.site.register(Press)
+admin.site.register(Author)
+admin.site.register(Leavemessage)
+admin.site.register(Changerequest)
+admin.site.register(Wishbook)
+admin.site.register(FriendRequest)
+admin.site.register(FriendShip)
 

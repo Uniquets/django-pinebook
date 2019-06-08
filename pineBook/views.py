@@ -1,17 +1,14 @@
 from django.shortcuts import render
 from django.http import HttpResponse,Http404
 from pineBook.forms import loginForm,registerForm
-from book.models import *
 from friend.models import *
 from django.contrib import auth
 from django.http import HttpResponseRedirect,JsonResponse
 from django.contrib.auth.models import User
-from django.core import serializers
 from django.core.mail import send_mail
-import json
 import uuid
-
-
+from django.views.decorators.csrf import csrf_exempt
+from datetime import *
 
 vcode_changepwd = {}
 vcode_register = {}
@@ -41,6 +38,63 @@ def homepage(request):
         ret["msg"] = form.errors
         return JsonResponse(ret)
 
+def booklayer(request,id):
+    if request.method == 'GET':
+        temp = Book.objects.get(id=id)
+        book = {
+            'name': temp.name,
+            'owner': temp.owner.username,
+            'author': Author.objects.get(id=temp.author_id).name,
+            'press': Press.objects.get(id=temp.press_id).name,
+            'school': School.objects.get(id=temp.school_id).name,
+            'city': City.objects.get(id=temp.city_id).name,
+            'cover': temp.cover.url,
+            'intro': temp.intro,
+            'id':temp.id
+        }
+        message = []
+        for m in temp.book_leavemessage.order_by('-sendtime'):
+            message.append({
+                'leaver':m.leaver.username,
+                'sendtime':convertime(m.sendtime),
+                'content':m.content,
+                'status':m.status
+            })
+        if  request.user.id == temp.owner.id:
+            isowner = True
+        else:
+            isowner = False
+        unreadcount = temp.book_leavemessage.filter(status='未读').count()
+        booklist = []
+        for b in  request.user.user_book.all():
+            booklist.append({'id':b.id,'title':b.name,'author':b.author})
+        hasrequested = False
+        if request.user.user_changerequest.filter(booka=temp):
+            hasrequested = True
+        return render(request, 'booklayer.html',
+                      {'book':book,'message':message,
+                       'isowner':isowner,'unread':unreadcount,
+                       'booklist':booklist,'hasrequested':hasrequested})
+
+def sendchangerequest(request):
+    if request.method == 'POST':
+        data =request.POST
+        print(request.POST.get('booka'))
+        try:
+            c = Changerequest(
+                            requester = request.user,
+                            receiver = User.objects.get(username=data.get('receive')),
+                            booka = Book.objects.get(id=data.get('booka')),
+                            bookb = Book.objects.get(id=data.get('bookb')),
+                            message = data.get('message'),
+                            unread = User.objects.get(username=data.get('receive'))
+                              )
+            c.save()
+            s = "OK"
+        except Exception as e:
+            raise e
+    return JsonResponse({'status':s})
+
 def searchuser(request):
     if request.method == 'POST':
         nametxt = request.POST.get('searchtxt')
@@ -51,16 +105,16 @@ def searchuser(request):
         return JsonResponse(resultlist)
 
 
-def getdict(books):    #将查询到的书集合转换为格式{id:{name:xxx,author:xxx}}的字典
-    rackdic = {}
-    books = serializers.serialize("json", books)
-    print(books)
-    books = json.loads(books)
+def getlist(books):    #将查询到的书集合转换为格式{id:{name:xxx,author:xxx}}的字典
+    rackdic = []
     for book in books:
-        rackdic[book['pk']] = {'name': book['fields']['name'] ,
-                               'author': Author.objects.get(id=book['fields']['author']).name,
-                               'cover': book['fields']['cover']}
-    print(rackdic)
+        rackdic.append({'id':book.id,
+                        'name': book.name ,
+                        'author': book.author.name,
+                        'cover': book.cover.url,
+                        'unread':book.book_leavemessage.filter(status='未读').count(),
+                        'owner':book.owner.username
+                            })
     return rackdic
 
 def getbooksfromAuthor(txt):
@@ -72,59 +126,66 @@ def getbooksfromAuthor(txt):
 
 def getrack(request):
     data={}
-    print(request.GET.get('racktype'))
+    racktype=request.GET.get('racktype')
     if request.method == 'GET' : #通过ajax.GET请求渲染书架，判断当前登陆的用户的所在地，学校，渲染出本校书架，同城书架，个人书架
         if request.user.is_authenticated:
-            if request.GET.get("racktype") == "city":
-                city = City.objects.get(name = Reader.objects.get(user_id=request.user.id).city)
+            if racktype == "city":
+                city = City.objects.get(name = request.user.profile.city)
                 books = city.city_book.all()
-                books = getdict(books)
+                books = getlist(books)
                 data['status'] = 'online'
-                data['city'] = Reader.objects.get(user_id=request.user.id).city
+                data['city'] = request.user.profile.city
                 data['books'] = books
                 return JsonResponse(data)
-            elif request.GET.get("racktype") == "school":
-                school = School.objects.get(name = Reader.objects.get(user_id=request.user.id).school)
+            elif racktype == "school":
+                school = School.objects.get(name = request.user.profile.school)
                 books = school.school_book.all()
-                books = getdict(books)
+                books = getlist(books)
                 data['status'] = 'online'
-                data['school'] = Reader.objects.get(user_id=request.user.id).school
+                data['school'] = request.user.profile.school
+                data['books'] = books
+                return JsonResponse(data)
+            elif racktype.isdigit():
+                books = User.objects.get(id=racktype).user_book.all()
+                books = getlist(books)
                 data['books'] = books
                 return JsonResponse(data)
         else:
                 books = Book.objects.filter(city=1)
-                books = getdict(books)
+                books = getlist(books)
                 data['city'] = '成都'
                 data['status'] = 'offline'
                 data['books'] = books
                 return JsonResponse(data)
     elif request.method == 'POST': #通过ajax.POST提交筛选项，直接筛选出对应的书籍进行渲染书架
-        data["books"]={}
+        data["books"]=[]
+        queryresult =[]
         txt = request.POST.get('filtertxt')
         option = request.POST.getlist('option')
         nameset = Book.objects.filter(name__contains=txt)#Book.objects.filter(name__contains='白')
-        authorset = getbooksfromAuthor(txt)
-        if 'name' in option and nameset:
-            data["books"].update(getdict(nameset))
-        if 'author' in option and authorset:
-            data["books"].update(getdict(authorset))
-        data['status']='filter'
+        if 'author' in option and nameset:
+            for book in nameset:
+                    queryresult.append({'id':book.id,
+                        'name': book.name ,
+                        'author': book.author.name,
+                        'cover': book.cover.url,
+                        'unread':book.book_leavemessage.filter(status='未读').count(),
+                        'owner':book.owner.username
+                            })
+        if 'name' in option:
+            for author in Author.objects.filter(name__contains=txt):
+                for book in author.author_book.all():
+                    if book not in nameset:
+                        queryresult.append({'id':book.id,
+                            'name': book.name ,
+                            'author': book.author.name,
+                            'cover': book.cover.url,
+                            'unread':book.book_leavemessage.filter(status='未读').count(),
+                            'owner':book.owner.username
+                                })
+        data["books"] = queryresult
+        data["status"]='filter'
         return JsonResponse(data)
-
-def showbook(request):
-    if request.method == 'GET' and request.GET.get('id'):
-        temp = Book.objects.get(id=request.GET.get('id'))
-        book = {
-            'name': temp.name,
-            'owner': Reader.objects.get(id=temp.owner_id).user.username,
-            'author': Author.objects.get(id=temp.author_id).name,
-            'press': Press.objects.get(id=temp.press_id).name,
-            'school': School.objects.get(id=temp.school_id).name,
-            'city': City.objects.get(id=temp.city_id).name,
-            'cover': temp.cover.url,
-            'intro': temp.intro
-                }
-        return JsonResponse(book)
 
 def logout(request):
     auth.logout(request)
@@ -182,5 +243,202 @@ def sendemail(request):
             vcode_changepwd[email]=vcode
     print(vcode_register)
     return JsonResponse(context)
+
+def sendleavemessage(request):
+    if(request.method=='POST'):
+        content=request.POST.get('message')
+        if request.POST.get('bookid'):
+            id = request.POST.get('bookid')
+            book = Book.objects.get(id=id)
+            leaver = request.user
+            try:
+                message=Leavemessage(content=content,book=book,leaver=leaver,status='未读')
+                message.save()
+                print(message.sendtime)
+                data = {
+                    'message': content,
+                    'leaver':leaver.username,
+                    'status':'未读',
+                    'sendtime':convertime(message.sendtime)
+                }
+            except:
+                data = {
+                    'status':'save error'
+                }
+            return JsonResponse(data)
+        elif request.POST.get('userid'):
+            id = request.POST.get('userid')
+            owner = User.objects.get(id = id)
+            leaver = request.user
+            try:
+                message = Userleaveboard(content=content, leaver=leaver, owner=owner, status='未读')
+                message.save()
+                data = {
+                    'message': content,
+                    'leaver': leaver.username,
+                    'status': '未读',
+                    'sendtime':convertime(message.sendtime)
+                }
+            except:
+                data = {
+                    'status': 'save error'
+                }
+            return JsonResponse(data)
+
+def addlabel(request):
+    if request.method=='POST':
+        content = request.POST.get('label')
+        labelfor = request.user
+        try:
+            label = Label(content=content,labelfor=labelfor)
+            label.save()
+            return JsonResponse({'status':'OK'})
+        except Exception as e:
+            raise e
+    return JsonResponse({'status': 'ERROR'})
+
+def getuserdata(request,id):
+    if request.method=='GET':
+        user = User.objects.get(id=id)
+        loginuser = request.user
+        reader = user.profile
+        labellist=[]
+        wishlist=[]
+        isrequesting = 'no'
+        isfriend ='no'
+        isself ='no'
+        if user.id ==loginuser.id:
+            isself = 'yes'
+        if loginuser.user_friendrequest.filter(receiver=user):
+            isrequesting = 'yes'
+        elif loginuser.fa_FriendShip.filter(fb=user):
+            isfriend='yes'
+        elif user.fa_FriendShip.filter(fb=loginuser):
+            isfriend='yes'
+        for label in Label.objects.filter(labelfor=id):
+            labellist.append(label.content)
+        for wish in user.user_wishlist.all():
+            wishlist.append({'title':wish.title,'author':wish.author})
+        userdata = {
+            "username":user.username,
+            "email":user.email,
+            "city":reader.city,
+            "school":reader.school,
+            "grade":reader.grade,
+            "labellist":labellist,
+            "wishlist":wishlist,
+            'isrequesting':isrequesting,
+            'isfriend':isfriend,
+            'isself':isself
+        }
+        print(userdata)
+        return JsonResponse(userdata)
+
+def getuserleaveboard(request,id):
+    if request.method == 'GET':
+        messagelist = []
+        for m in User.objects.get(id=id).owner_userleavemessage.order_by("-sendtime"):
+            messagelist.append({'leaver':m.leaver.username,'sendtime':convertime(m.sendtime),'content':m.content})
+
+        return JsonResponse({'messagelist':messagelist})
+
+def convertime(datetime):
+    return  ('%s年%s月%s日  %s' % (
+            datetime.strftime('%Y'), datetime.strftime('%m'),
+            datetime.strftime('%d'), datetime.strftime('%X')))
+
+
+@csrf_exempt
+def addbook(request):
+    if request.method =='POST':
+        owner=request.user
+        name = request.POST.get('title')
+        author = request.POST.get('author')
+        cover=request.FILES.get('cover')
+        press=request.POST.get('press')
+        intro = request.POST.get('intro')
+        print(cover)
+        if intro=="" or press=="" or name=="" or author=="":
+            return JsonResponse({'status':'字段不能为空'})
+        elif cover==None:
+            return JsonResponse({'status': '请上传封面图'})
+        else:
+            if Author.objects.filter(name=author):
+                nauthor = Author.objects.get(name=author)
+            else :
+                nauthor = Author(name=author)
+                nauthor.save()
+            if Press.objects.filter(name=press):
+                npress = Press.objects.get(name=press)
+            else:
+                npress = Press(name=press)
+                npress.save()
+            book = Book(owner=owner,name=name,author=nauthor,
+                        press=npress,
+                        city=City.objects.get(name=owner.profile.city),
+                        school=School.objects.get(name=owner.profile.school),
+                        cover=cover,intro=intro)
+            book.save()
+            return JsonResponse({'status':'添加完成'})
+
+@csrf_exempt
+def addwish(request):
+    if request.method=='POST':
+        title = request.POST.get('title')
+        author = request.POST.get('author')
+        if title == "" or author == "":
+            return JsonResponse({'status':'请填写书名及作者'})
+        wishbook = Wishbook(owner=request.user,title=title,author=author)
+        wishbook.save()
+        return JsonResponse({'status':'添加完成'})
+
+def getwishlist(request):
+    wishlist = []
+    if request.method=='GET':
+        for n in request.user.user_wishlist.all():
+            wishlist.append({'title':n.title,'author':n.author})
+        return JsonResponse({'wishlist':wishlist})
+
+@csrf_exempt
+def addfriend(request):
+    if request.method=='POST':
+        reciveid = request.POST.get('id')
+        message = request.POST.get('message')
+        receiver = User.objects.get(id=reciveid)
+        requester = request.user
+        try:
+            friendrequest = FriendRequest(requester=requester,receiver=receiver,unread=receiver,message=message)
+            friendrequest.save()
+            return JsonResponse({'status': '好友申请已发送'})
+        except:
+            return JsonResponse({'status': '数据库存入错误'})
+
+
+def getmessagelist(request):
+    if request.method == 'GET':
+        user = request.user
+        type = request.GET.get('type')
+        if type == 'beensent':
+            friendrequestlist = []
+            exchangerequestlist = []
+            for r in user.user_friendrequest.order_by("request_time"):
+                time = convertime(r.request_time)
+                friendrequestlist.append({'receiver':r.receiver.username,'status':r.status,'sendtime':time,'message':r.message,'type':'好友申请'})
+            for e in user.user_changerequest.order_by("requesttime"):
+                exchangerequestlist.append({'receiver':e.receiver.username,'booka':e.booka.name,'bookb':e.bookb.name,
+                                            'message':e.message,'status':e.statusa,'sendtime':convertime(e.requesttime)})
+            return JsonResponse({'friendrequestlist':friendrequestlist,'exchange_request_list':exchangerequestlist})
+        elif type == 'received':
+            friend_receive_list = []
+            exchange_receive_list = []
+            for r in user.user_friendreceive.order_by("request_time"):
+                time = convertime(r.request_time)
+                friend_receive_list.append(
+                    {'requester': r.requester.username, 'sendtime': time, 'message': r.message})
+            for e in user.user_changereceive.order_by("requesttime"):
+                exchange_receive_list.append(
+                    {'requester': e.requester.username, 'booka': e.booka.name, 'bookb': e.bookb.name,
+                     'message': e.message,'sendtime': convertime(e.requesttime)})
+            return JsonResponse({'friend_receive_list': friend_receive_list, 'exchange_receive_list': exchange_receive_list})
 
 

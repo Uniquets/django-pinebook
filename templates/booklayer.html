@@ -1,0 +1,371 @@
+<head>
+    <link rel="stylesheet" href="/static/bootstrap/css/bootstrap.min.css">
+    <link rel="icon" href="/static/blog/img/icon.jpg" type="image/jpg">
+    <link rel="stylesheet" href="/static/iconfont/iconfont.css">
+    <link rel="stylesheet" href="/static/layui/css/layui.css">
+    <script src="/static/jquery/dist/jquery.min.js"></script>
+    <script src="/static/bootstrap/js/bootstrap.min.js"></script>
+    <script src="/static/layer/layer.js"></script>
+    <link rel="stylesheet" href="/static/iconfont/iconfont.css">
+    <script src="/static/layui/layui.js"></script>
+    <style>
+        li {
+            list-style: none;
+        }
+        body,div,dl,dt,dd,ul,ol,li,h1,h2,h3,h4,h5,h6,pre,code,legend,button
+        form,input,p,th,td {
+            padding: 0;
+            margin: 0;
+        }
+        #infoShow dt{
+            text-align: center;
+        }
+        #infoShow dd {
+            text-align: center;
+            margin-left: 3px;
+            padding: 5px 10px;
+        }
+        #infoShow dl {
+            display: flex;
+            margin: 15px;
+            align-items: baseline;
+        }
+        #cover {
+            width: 49%;
+            display: inline-block;
+        }
+        #cover img {
+            width: 200px;
+            height: 280px;
+            text-align: center;
+            border-radius: 10px;
+            box-shadow: 0px 0px 2px black;
+        }
+        #bookinfo {
+            width: 49%;
+            display: inline-block;
+            vertical-align: middle;
+        }
+        #bookinfo p{
+            font-size: 24px;
+            text-align: center;
+        }
+        #booklayer {
+            padding: 20px 0px 20px 20px;
+            background: snow;
+            border-radius: 20px;
+        }
+        #booklayer label {
+            font-size: 14px;
+            color: #6c757d;
+        }
+        #intro {
+            margin-top: 20px;
+            margin-right: 20px;
+        }
+        #intro p{
+            padding: 10px;
+            display: inline-block;
+            background-color: lightblue;
+            border-radius: 5px;
+            font-size: 14px;
+            width: 100%;
+        }
+        #owner,#position {
+            width: 45%;
+            display: inline-block;
+        }
+        #owner p{
+            display: inline-block;
+            text-align: center;
+            margin-top: 20px;
+            margin-left: 30px;
+        }
+        #position p {
+            display: inline-block;
+            text-align: center;
+            margin-top: 20px;
+            margin-left: 30px;
+        }
+        #getexchange,#getremove {
+            display: block;
+            text-align: center;
+            margin: 20px auto;
+        }
+        #bookBtnGroup {
+            text-align: center;
+            width: 100%;
+        }
+        #floatBtn {
+            padding: 0;
+            outline: none;
+            bottom: 200px;
+            position: absolute;
+            left: 50%;
+            margin-left: -40px;
+            width: 80px;
+            font-size: 13px;
+            border-top-right-radius: 15px;
+            border-top-left-radius: 15px;
+            border: #b9bbbe 3px solid;
+            border-bottom: none;
+            vertical-align: top;
+        }
+        #messagePost {
+            border-top-left-radius: 20px;
+            border-top-right-radius: 20px;
+            border-top: #b9bbbe 3px solid;
+            width: 100%;
+            height: 200px;
+            background-color: snow;
+            bottom: -190px;
+            position: absolute;
+            font-size: 13px
+        }
+        #postContent {
+            width:400px;
+            height: 100px;
+            margin: 20px;
+        }
+        #messageContent p{
+            display: inline;
+            font-size: 14px;
+            padding: 5px;
+            margin: 20px 0px;
+        }
+        #messageContent li {
+            width: 480px;
+            padding: 5px 15px;
+        }
+        #messageContent div{
+            margin: 0px auto 10px;
+            padding: 5px;
+            font-size: 14px;
+            color: #6c757d;
+        }
+        #messageContent span {
+            margin-left: 80px;
+        }
+        #wishlist div {
+            display: inline-block;
+            padding: 0.5rem;
+            margin: 10px;
+        }
+        #userlabel div {
+            display: inline-block;
+            padding: 0.5rem;
+            margin: 10px;
+        }
+        #bookb {
+            margin-top: 10px;
+            margin-bottom: 10px;
+        }
+        #changemessage {
+            width: 465px;
+            height: 50px;
+            margin: 10px auto;
+            display: block;
+        }
+        #popmessage {
+            position: absolute;
+            z-index: 1000;
+            width: 200px;
+            height: 50px;
+            left: 50%;
+            text-align: center;
+            line-height: 50px;
+            border: #80bdff 3px solid;
+            border-radius: 17px;
+            color: whitesmoke;
+            background-color: #40AFFE;
+            top: 50%;
+            margin-left: -100px;
+        }
+    </style>
+</head>
+<body style="overflow: hidden;background-color: snow">
+<div id="wrap">
+<div id='bookBtnGroup' role="group"  class='btn-group' aria-label="Basic example">
+  <button type="button" class="btn btn-secondary col-4" onclick="toBookLayer()">书籍详情</button>
+  <button type="button" class="btn btn-secondary col-4" onclick="toMessageBoard()">留言板
+    {% if unread %}
+      <span class="badge badge-light">{{unread}}</span>
+      {% endif %}
+  </button>
+    {% if hasrequested %}
+    <button type="button" class="btn btn-secondary col-4"  disabled>已申请</button>
+    {% elif isowner %}
+    <button type="button" class="btn btn-secondary col-4" disabled>已拥有</button>
+    {% else %}<button id="exchangeFormBtn" type="button" class="btn btn-secondary col-4" onclick="toExchange()">申请交换</button>
+    {% endif %}
+</div>
+<div id="booklayer">
+    <div id = "cover">
+        <img src="/static/covers/{{book.cover}}" alt="#">
+    </div>
+    <div id="bookinfo">
+        <div id="title"><label>书名</label><p>{{book.name}}</p></div>
+        <div id="author"><label>作者</label><p>{{book.author}}</p></div>
+        <div id="press"><label>出版社</label><p>{{book.press}}</p></div>
+    </div>
+    <div id="intro"><label>简介</label><p>{{book.intro}}</p></div>
+    <div id="owner" ><label>持有人</label><p>{{book.owner}}</p></div>
+    <div id="position"><label>所在地</label><p>{{book.city}}  {{book.school}}</p></div>
+    {% if isowner %}
+    <button id="getremove" class='btn btn-danger' type="button">下架书籍</button>
+    {% elif hasrequested %}
+    <button  style="display: block;text-align: center;margin: 20px auto;" class="btn btn-secondary col-4"  disabled>已申请</button>
+    {% else %}
+    <button id="getexchange" class='btn btn-success' type="button">申请借阅</button>
+    {% endif%}
+</div>
+<div id="messageBoard" style="display: none;">
+    <div id="messageContent" style="width: 100%;height: 578px;position: relative;overflow: auto">
+        {% if message %}
+        {% for n in message %}
+        <li>
+            <div>{{n.leaver}} <span>发表于{{n.sendtime}}</span></div>
+            <p>{{n.content}}</p>
+            <div class="layui-btn-group" style='text-align: right;display: block'>
+             <button class="layui-btn layui-btn-sm">
+                 <i class='layui-icon layui-icon-reply-fill'></i>(12)
+             </button>
+                <button class="layui-btn layui-btn-sm"><i class='layui-icon layui-icon-praise'></i>(9)
+                </button>
+            </div>
+            <hr>
+        </li>
+        {% endfor%}
+        {% else %}
+            <div id="emptyContent" style="margin: 200px auto;text-align: center">该书暂无留言</div>
+        {% endif%}
+    </div>
+    <div id="messagePost" >
+        <button id="floatBtn" onclick="btnSlide()">
+            留言
+        </button>
+        <label for="postContent" style="width: 60px;float: left;margin-top: 20px;text-align: right;">留言内容</label>
+        <textarea name="message" id="postContent" maxlength="100" placeholder="请输入留言内容......"></textarea>
+        {% csrf_token %}
+        <button style="margin: 0px auto;display: block" class="btn btn-success" onclick="postMessage()">发布留言</button>
+    </div>
+</div>
+    <div id="exchangeForm" style="background-color: snow;;display: none;width: 100%;height: 572px;padding: 10px;text-align: left;font-size: 14px;overflow: scroll">
+        <p style="">当前申请交换 {{book.owner}} 的 <span style="color: #0069d9">《{{book.name}}》{{book.author}}</span> </p>
+        <hr>
+        <p>他的愿望单列表:</p>
+        <div id="wishlist">
+            <div class="alert alert-primary" role="alert">
+                《自卑与超越》阿德勒
+            </div>
+        </div>
+        <hr>
+        <p>他的阅读标签:</p>
+        <div id="userlabel">
+            <div class="alert alert-success" role="alert">
+                心理学
+            </div>
+        </div>
+        <hr>
+        <div>
+            <p>请在个人书架中选择一本书用于交换</p>
+            <select name="bookb" id="bookb" class="form-control" >
+                <option value="" disabled selected>请选择您用于交换的书籍</option>
+                {% for book in booklist %}
+                <option value={{book.id}}>《{{book.title}}》{{book.author}}</option>
+                {% endfor %}
+            </select>
+            <p>附加信息</p>
+            <textarea name="changemessage" id="changemessage" maxlength="50" placeholder="请输入附加信息...."></textarea>
+            {% csrf_token %}
+        </div>
+        <button type="button" class="btn btn-success" style="margin: 20px auto;display: block;" onclick="sendChangeRequest()">提交申请</button>
+    </div>
+</div>
+
+</body>
+<script>
+    var slideofState = 0;
+    function sendChangeRequest() {
+        if($("#bookb").val()==null){
+            alert('请选择用于交换的书籍')
+        }
+        else {
+            $.ajax(
+                {
+                    url:"{% url 'sendchangerequest'%}",
+                    type:'POST',
+                    data:{'receive': "{{book.owner}}",
+                        'booka' : "{{book.id}}",
+                        'bookb':$("#bookb").val(),
+                        'message':$("#changemessage").val(),
+                        csrfmiddlewaretoken: '{{ csrf_token }}'},
+                    datatype:'json',
+                    success(data){
+                        if(data.status =="OK"){
+                            toBookLayer()
+                            popMessage('借阅申请已发送')
+                            $("#exchangeFormBtn").text('已申请').attr('disabled','true')
+                        }
+                    }
+                }
+            )
+        }
+    }
+    function popMessage(txt) {
+        console.log("pop")
+        $("#popmessage").remove()
+        var txtele = $("<div id=\'popmessage\'>"+txt+"</div>")
+        $('body').append(txtele)
+        setTimeout(function () {
+            $("#popmessage").fadeOut();
+        },1000);
+    }
+    function postMessage() {
+        if($("#postContent").val()===""){
+            popMessage("请输入留言内容")
+        }
+        else {$.ajax(
+            {
+                url:"{% url 'sendleavemessage' %}",
+                datatype:'json',
+                type:'post',
+                data:{'message':$("#postContent").val(),'bookid':"{{book.id}}",csrfmiddlewaretoken: '{{ csrf_token  }}'},
+                success:function(data){
+                    m = $("<li>\n" +
+                        "            <div>"+data.leaver+" <span>发表于"+data.sendtime+"</span></div>\n" +
+                        "            <p>"+data.message+"</p>\n" +
+                        "            <hr>\n" +
+                        "        </li>")
+                    $("#emptyContent").remove()
+                    $("#messageContent").prepend(m)
+                    $("#postContent").val("")
+                    btnSlide()
+                    popMessage("留言成功")
+                                    }
+            }
+        )}
+    }
+    function btnSlide() {
+        if(slideofState===0){
+            $("#messagePost").animate({bottom:'+=190px'});
+            slideofState = 1;
+            }
+        else{
+            $("#messagePost").animate({bottom:'-=190px'});
+            slideofState = 0;
+            }
+    }
+    function toBookLayer() {
+        $("#messageBoard,#exchangeForm").css('display','none');
+        $("#booklayer").css('display','block')
+    }
+    function toMessageBoard() {
+        $("#booklayer,#exchangeForm").css('display','none');
+        $("#messageBoard").css('display','block')
+    }
+    function toExchange() {
+        $("#messageBoard,#booklayer").css('display','none');
+        $("#exchangeForm").css('display','block')
+    }
+</script>

@@ -7,10 +7,12 @@
     <link rel="stylesheet" href="/static/css/base.css">
     <link rel="icon" href="/static/blog/img/icon.jpg" type="image/jpg">
     <link rel="stylesheet" href="/static/iconfont/iconfont.css">
+    <link rel="stylesheet" href="/static/layui/css/layui.css">
     {% block style %}{% endblock%}
     <script src="/static/jquery/dist/jquery.min.js"></script>
     <script src="/static/bootstrap/js/bootstrap.min.js"></script>
     <script src="/static/layer/layer.js"></script>
+    <script src="/static/layui/layui.js"></script>
     <style>
         #logfm>div{
             display: flex;
@@ -141,7 +143,11 @@
             })
                                 }
     )
+    layui.use('element', function(){
+        var element = layui.element;
 
+        //…
+    });
 </script>
 {% block script %} {% endblock %}
 </body>

@@ -12,7 +12,8 @@ def initdata(request):
                 'friends': friends,
                 'loginform': form,
                 'userdata':userdata,
-                'database':database
+                'database':database,
+                'userid':request.user.id
                 }
     return {'loginform': form}
 
@@ -39,9 +40,9 @@ def getdatalist():
 def getfriendslist(userid):
     friends = []
     for n in FriendShip.objects.filter(fa=userid):
-        friends.append({'id': n.fb, 'name': User.objects.get(id=n.fb).username})
+        friends.append({'id': n.fb.id, 'name': n.fb.username})
     for n in FriendShip.objects.filter(fb=userid):
-        friends.append({'id': n.fb, 'name': User.objects.get(id=n.fa).username})
+        friends.append({'id': n.fb.id, 'name': n.fa.username})
     return friends
 
 def getuserdata(userid):
@@ -57,7 +58,7 @@ def getuserdata(userid):
         "城市":reader.city,
         "学校":reader.school,
         "是否在校":reader.grade,
-        "个人标签":labellist
+        "个人标签":labellist,
     }
     return userdata
 

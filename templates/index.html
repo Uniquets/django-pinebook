@@ -6,66 +6,229 @@
        display: none;
    }
    #userInfo {
-       background-color: white;
-       border: #b9bbbe 3px solid;
-       box-shadow: #4e555b 2px 2px 4px;
        width: 800px;
-       margin-top: 20px;
-       margin-left: 20px;
-       border-radius: 10px;
-       padding: 20px;
    }
-    #infoShow dt{
-        text-align: center;
-    }
-   #infoShow dd {
+   #popmessage {
+       position: absolute;
+       z-index: 19980424;
+       width: 200px;
+       height: 50px;
+       left: 50%;
        text-align: center;
-       margin-left: 3px;
-       padding: 5px 10px;
+       line-height: 50px;
+       border: #80bdff 3px solid;
+       border-radius: 17px;
+       color: whitesmoke;
+       background-color: #40AFFE;
+       top: 50%;
+       margin-left: -100px;
    }
-    #infoShow dl {
-        display: flex;
-        margin: 15px;
-        align-items: baseline;
+    #mylabel dd{
+        padding: 5px;
+        margin-left: 5px;
     }
-    #booklayer {
+    #otherUser .alert{
+        margin: 5px;
+        display: inline-block;
+        padding: 5px;
+    }
+   #otherWrap {
+       background-color: white;
+       width: 798px;
+       height: 520px;
+       border-radius: 8px;
+   }
+    #infoBtns {
+    }
+    #addFriend {
+        display: block;
+        float: right;
+    }
+    #addFriend button{
+        vertical-align: bottom;
+    }
+    #otherInfoContent {
+        padding:0px 20px;
+        width: 100%;
+    }
+   #otherInfoContent p {
+       margin-top: 20px;
+   }
+   #messagePost {
+       border-top-left-radius: 20px;
+       border-top-right-radius: 20px;
+       border-top: #b9bbbe 3px solid;
+       width: 100%;
+       height: 200px;
+       background-color: snow;
+       bottom: -190px;
+       position: absolute;
+       font-size: 13px;
+       padding: 30px;
+   }
+   #floatBtn {
+       outline: none;
+       bottom: 200px;
+       position: absolute;
+       left: 50%;
+       margin-left: -40px;
+       width: 80px;
+       font-size: 13px;
+       border-top-right-radius: 15px;
+       border-top-left-radius: 15px;
+       border: #b9bbbe 3px solid;
+       border-bottom: none;
+   }
+    #otherMessageBoard {
+        position: relative;
+        overflow: hidden;
+    }
+    #messageContent,#myboard {
+        height: 520px;
+        width: 790px;
+    }
+    #messageContent li {
+        width: 740px;
+        margin: 7px 20px;
+        padding: 5px 5px;
+        border: #2F4056 1px solid;
+        border-radius: 3px;
+        background: #f2f2f2;
+    }
+   #messageContent>li>p{
+       display: inline;
+       font-size: 14px;
+       padding: 5px;
+       margin: 20px 0px;
+   }
+   #messageContent .messageRecord{
+       margin: 0px auto 10px;
+       padding: 5px;
+       font-size: 14px;
+       color: #6c757d;
+   }
+   #messageContent .messageReply{
+       width: 80px;
+       height: 40px;
+   }
+   #messageContent span {
+       margin-left: 80px;
+   }
+   #myboard li {
+       width: 740px;
+       margin: 7px 20px;
+       padding: 5px 5px;
+       border: #2F4056 1px solid;
+       border-radius: 3px;
+       background: #f2f2f2;
+   }
+   #myboard>li>p{
+       display: inline;
+       font-size: 14px;
+       padding: 5px;
+       margin: 20px 0px;
+   }
+   #myboard .messageRecord{
+       margin: 0px auto 10px;
+       padding: 5px;
+       font-size: 14px;
+       color: #6c757d;
+   }
+   #myboard .messageReply{
+       width: 80px;
+       height: 40px;
+   }
+   #myboard span {
+       margin-left: 80px;
+   }
+   #mainContent>.w{
+       height: 600px;
+       background-color: white;
+       border-radius: 10px 0 10px 10px;
+   }
+    .nullnode {
+        position: absolute;
+        top: 50%;
+        text-align: center;
+        font-size: 25px;
+        width: 100%;
+        margin-top: -50px;
+    }
+    #addBookBtn,#addWishBtn{
+        position: absolute;
+        top: -40px;
+    }
+    .messageItems{
+        background-color: #ebebeb;
+        margin: 5px 10px;
+        border-radius: 3px;
+        padding: 5px;
         display: flex;
         flex-wrap: wrap;
+        font-size: 14px;
+        border: #4e555b 1px solid;
     }
-    #booklayer
+   .messageItems span{
+       margin: 0 10px;
+       color: #6c757d;
+   }
+   .messageItems>p{
+       margin-bottom: 10px;
+   }
+    #infoShow>dl {
+        margin: 20px 0;
+    }
+    .layui-tab-card {
+        margin-top: 5px;
+        margin-bottom:0px ;
+        border-bottom: none;
+    }
+    #nav .layui-nav>li{
+        padding: 0;
+        text-align: center;
+    }
+    #slideContent {
+        border: #9fcdff 1px solid;
+        padding:10px 8px 10px;
+        margin: 5px 0;
+        border-radius: 5px;
+        background-color:#eeeeee;
+        display: none;
+        height: 500px;
+        box-shadow: #4e555b 3px 3px 20px;
+    }
 </style>
 {% endblock%}
 {% block content %}
-    <div id="nav" class="navbar navbar-light">
-        <div class="w">
-            <div id = 'bookfilter' class="col-6">
+    <div id="nav" >
+        <div class="w" style="margin-bottom: 5px">
+            <div id = 'bookfilter' class="col-6" style="padding-left: 0px">
                 <form id = 'filterform' style="display: flex;padding-bottom: 8px">
-                    {% csrf_token %}
                     <input type="search" class="form-control mr-sm-2" name="filtertxt" placeholder="搜索书名或作者...">
-                    <button id="searchrack" class="btn  btn-success" onclick="getRack('filter')">搜索</button>
+                    <button type="button" id="searchrack" class="layui-btn " onclick="getFilterRackHandle()"><i class="layui-icon layui-icon-search"></i>搜索</button>
                     <div style="position: absolute;top: 40px;font-size: 11px">
                         <input type="checkbox" name="option" value="name"  style="margin-left: 10px" checked>搜索书名
                         <input type="checkbox" name="option" value="author" style="margin-left: 15px" checked>搜索作者
                     </div>
                 </form>
             </div>
-            <div class="col-6" style="display: flex">
-            <button class="btn btn-dark col-4"  id = "schoolRack" onclick="schoolRackHandle()">同校书架</button>
-            <button class="btn btn-dark col-4"  id = "cityRack" onclick="cityRackHandle()">同城书架</button>
-            <button class="btn btn-dark col-4" id = "userCenter" onclick="personalList()">个人中心<span class="badge badge-secondary"></span></button>
-            </div>
-            <div id="slide" style="position: absolute;left: -170px;top: 15px;">
-                <button class="btn btn-success" style="margin:0 35px;" onclick=slideFriends()>好友列表 <span class="iconfont icon-xiala"></span></button>
-                <div id="slideContent" style="border: #9fcdff 2px solid;padding:10px 8px 10px;margin: 5px 0;border-radius: 8px;background-color:darkseagreen;display: none;height: 500px;">
+            <ul class="layui-nav col-6" lay-filter="" style="float: right">
+            <li class="layui-nav-item layui-this col-4"  id = "schoolRack" onclick="schoolRackHandle()"><a >同校书架</a></li>
+            <li class="layui-nav-item col-4"  id = "cityRack" onclick="cityRackHandle()"><a >同城书架</a></li>
+            <li class="layui-nav-item col-4" id = "userCenter" onclick="personalList()"><a >个人中心<span class="badge badge-danger">12</span></a></li>
+            </ul>
+            <div id="slide" style="position: absolute;left: -200px;top: 0px;">
+                <button class="layui-btn" style="padding:0 52px;" onclick=slideFriends()><i class="layui-icon layui-icon-dialogue"></i>好友列表</button>
+                <div id="slideContent" >
                     <div id="searchFriend" style="font-size: 12px;">
                         <input id="usersearch" type="text" placeholder="搜索用户名..." class="form-control" style="display: inline-block;width: 100px;font-size: 15px;">
                         {% csrf_token%}
-                        <input type="button" onclick="searchUser()" class="btn btn-outline-success" value="搜索" style="display:inline-block;width: 60px;vertical-align: bottom;">
-                        <hr style="margin-bottom: 4px">
+                        <input type="button" onclick="searchUser()" class="layui-btn layui-btn-primary" value="搜索" style="display:inline-block;width: 60px;vertical-align: bottom;padding: 0px">
+                        <hr class="layui-bg-green" style="margin-bottom: 10px;height: 2px">
                     </div>
                     <ul id="friendsList" >
                         {% for n in friends %}
-                        <li data-userid={{n.id}}> <span class="iconfont icon-yonghu"></span>  {{n.name}}</li>
+                        <li data-userid={{n.id}} onclick="userPage(this)"> <span class="iconfont icon-yonghu"></span>  {{n.name}}</li>
                         {% endfor %}
                     </ul>
                     <div id="searchUser" style="display: none;">
@@ -79,84 +242,606 @@
             </div>
         </div>
     </div>
-        <div class="w" style="flex-direction: row-reverse">
-            <div id="personalNav" >
-                <button type="button" class="btn btn-light" onclick="userinfoHandle()">个人资料</button>
-                <button type="button" class="btn btn-light">我的书架<span class="badge badge-secondary"></span></button>
-                <button type="button" class="btn btn-light">我的愿望单</button>
-                <button type="button" class="btn btn-light">消息记录<span class="badge badge-secondary"></span></button>
+    <div class="w" style="flex-direction: row-reverse;  ">
+            <div class="layui-tab layui-tab-card" id="personalNav">
+            <ul class="layui-tab-title"  >
+                <li class="layui-this" onclick="userinfoHandle()">个人资料</li>
+                <li  onclick="getmyRack()">我的书架<span class="badge badge-danger">5</span><span class="badge badge-secondary"></span></li>
+                <li  onclick="getmyWish()">我的愿望单</li>
+                <li  onclick="toMessageBox()">消息记录<span class="badge badge-danger">4</span><span class="badge badge-secondary"></span></li>
+                <li  onclick="toLeaveBoard()">留言板<span class="badge badge-danger">3</span><span class="badge badge-secondary"></span></li>
+            </ul>
             </div>
-        </div>
+    </div>
+            <!--</div>
+                <div id="personalNav" >
+                <button type="button" class="btn btn-light" onclick="userinfoHandle()">个人资料</button>
+                <button type="button" class="btn btn-light" onclick="getmyRack()">我的书架<span class="badge badge-secondary"></span></button>
+                <button type="button" class="btn btn-light" onclick="getmyWish()">我的愿望单</button>
+                <button type="button" class="btn btn-light" onclick="toMessageBox()">消息记录<span class="badge badge-secondary"></span></button>
+            </div>-->
+
     <div id = "mainContent">
-        <div class="w">
-            <div id="bookRack" style="display: none">
-                <div id="bookbox">
-                </div>
+        <div class="w" >
+            <div id="bookRack" style="display: none;width: 800px;flex-wrap: wrap;align-content: baseline">
             </div>
             <div id="userInfo" style="display: none">
                 <div id="infoShow">
                         {% for key,value in userdata.items %}
                     <hr>
                             {% if key == '个人标签' %}
-                                <dl class="col-12" style="display: flex"><dt class="col-2" style="margin-right: 50px">{{key}}</dt>
+                                <dl id="mylabel" class="col-12" style="display: flex;flex-wrap: wrap"><dt class="col-2" >{{key}}</dt>
                                 {% for label in value %}
                                     <dd class="alert alert-primary">{{label}}</dd>
                                 {% endfor %}
                                     </dl>
+                            <div class="col-12" style="text-align: center">
+                                <input id="labeltxt" class="form-control col-3" type="text" placeholder="标签名" style="visibility:hidden;display: inline-block">
+                                {% csrf_token %}
+                                <button id="addLabelBtn" class="btn btn-primary col-3" onclick="addlabel()" type="button" style="line-height: 15px">添加标签+</button>
+                                <button id="canelAdd" class="btn btn-danger col-3" onclick="canelAdd()" type="button" style="line-height: 15px;visibility:hidden">取消</button>
+                            </div>
                             {% else %}
-                                <dl class="col-12"><dt class="col-2">{{key}}</dt><dd class="col-8">{{value}}</dd></dl>
+                                <dl class="col-12" style="display: flex"><dt class="col-2">{{key}}</dt><dd class="col-8">{{value}}</dd></dl>
                              {% endif %}
-
                     {% endfor %}
                 </div>
-                <div id="infoEdit" style="display:none">
-                <dl>
-                    <dt>用户名</dt>
-                    <dd>
-                        <input type="text">{{userdata.name}}
-                    </dd>
-                </dl>
-                <dl>
-                    <dt>性别</dt>
-                    <dd>
-                       <input type="radio" name="sex" value="male">Male<br>
-                        <input type="radio" name="sex" value="female">Female
-                    </dd>
-                </dl>
-                <dl>
-                    <dt>用户名</dt>
-                    <dd>
-                        <input type="text">{{userdata.name}}
-                    </dd>
-                </dl>
-                <dl>
-                    <dt>用户名</dt>
-                    <dd>
-                        <input type="text">{{userdata.name}}
-                    </dd>
-                </dl>
-                <dl>
-                    <dt>用户名</dt>
-                    <dd>
-                        <input type="text">{{userdata.name}}
-                    </dd>
-                </dl>
+                <div id="infoEdit" style="display:none">s
+                    {% for key,value in userdata.items %}
+                    <hr>
+                    {% if key == '个人标签' %}
+                    <dl class="col-12" style="display: flex"><dt class="col-2" style="margin-right: 50px">{{key}}</dt>
+                        {% for label in value %}
+                        <dd class="alert alert-primary">{{label}}</dd>
+
+                        {% endfor %}
+                    </dl>
+                    {% else %}
+                    <dl class="col-12" style="display: flex"><dt class="col-2">{{key}}</dt><dd class="col-8">{{value}}</dd></dl>
+                    {% endif %}
+                    {% endfor %}
                     </div>
+            </div>
+            <div id="otherUser" style="display: none">
+                <div id='infoBtns' >
+                    <div role="group"  class='btn-group' aria-label="Basic example">
+                    <button type="button" class="btn btn-secondary col-4" onclick="toOtherInfo()">个人资料</button>
+                    <button type="button" class="btn btn-secondary col-4" onclick="toOtherRack()">他的书架</button>
+                    <button type="button" class="btn btn-secondary col-4" onclick="toOtherMessage()">留言板</button>
+                    </div>
+                    <div id="addFriend">
+                        <button id="canelAddFriend" type="button" class="layui-btn" onclick="canelAddFriend()" style="display: none">取消</button>
+                        <input id="addFriendText" type="text" class="form-control" style="display: none;width: 230px" >
+                        <button id="btnAddFriend" type="button" class="layui-btn layui-btn-normal" onclick="addFriend()" style="width: 100px;float: right;margin-left: 2px">添加好友+</button>
+                    </div>
+                </div>
+                <div id="otherWrap">
+                <div id="otherInfo">
+                    <div id="otherInfoContent" style="display: flex;flex-wrap: wrap">
+                        <p class="col-6" id="otherName">用户名：<span></span></p>
+                        <p class="col-6" id="otherPos">所在地：<span></span></p>
+                        <p class="col-6" id="otherEmail">邮    箱：<span></span></p>
+                        <p class="col-6" id="otherGrade">年    级：<span></span></p>
+                    </div>
+                    <hr>
+                    <p style="margin-bottom: 20px;margin-left: 30px">愿望单列表:</p>
+                <div id="wishlist" style="padding:0 33px">
+
+                </div>
+                    <hr>
+                    <p style="margin-bottom: 20px;margin-left: 30px">阅读标签:</p>
+                <div id="labellist" style="padding:0 33px">
+                </div>
+
+                </div>
+                <div id="otherRack" style="display: none;flex-wrap: wrap">
+                    <div id="otherBookbox"></div>
+                </div>
+                <div id="otherMessageBoard" style="display: none;">
+                <div id="messageContent" style="position: relative;overflow: auto;">
+                </div>
+                <div id="messagePost" >
+                    <button id="floatBtn" onclick="btnSlide()">
+                        留言
+                    </button>
+                    <label for="postContent" style="width: 60px;float: left;">留言内容</label>
+                    <textarea name="message" id="postContent" maxlength="100" placeholder="请输入留言内容......" style="height: 100px;width: 600px"></textarea>
+                    {% csrf_token %}
+                    <button style="margin: 0px auto;display: block" class="btn btn-success" onclick="postMessageToUser()">发布留言</button>
+                </div>
+                </div>
+                </div>
+            </div>
+            <div id="myrack" style="display: none;width: 800px">
+                <button class="layui-btn layui-btn-normal" id="addBookBtn" onclick="addBook()">添加书籍</button>
+                <div id="mybooklist" style="width: 800px;display: flex;flex-wrap: wrap"></div>
+            </div>
+            <div id="mywish">
+                <button class="layui-btn layui-btn-normal" id="addWishBtn" onclick="addWishForm()" >添加愿望</button>
+                <div id="addWishForm" style="background-color: #ebebeb;border-radius: 5px;padding: 5px;display: none;width: 600px;">
+                    <div  style="display: inline-block"><label for="wishTitle">书名</label>
+                        <input class="form-control" type="text" id="wishTitle" style="display: inline-block;width: 200px;"></div>
+                    <div  style="display: inline-block" ><label for="wishAuthor">作者</label>
+                        <input  class="form-control" type="text" id="wishAuthor" style="display: inline-block;width: 200px;"></div>
+                    <button class="layui-btn layui-btn-normal" id="canelAddWish" onclick="sureAddWish()" style="vertical-align: baseline" >确认添加</button>
+                    </div>
+                <div id="mywishlist" style="width: 800px;display: flex;flex-wrap: wrap"></div>
+            </div>
+            <div id="myboard" style="display: none;overflow: auto"></div>
+            <div id="messageBox" style="display: none">
+                <div id="messageBtnGroup" class="layui-tab layui-tab-brief" lay-filter="docDemoTabBrief" style="width: 800px">
+                    <ul class="layui-tab-title">
+                    <li  class="col-6 layui-this" onclick="toSendMessageList()">已发出的消息</li>
+                    <li  class="col-6" onclick="toReceiveMessageList()">已收到的消息</li>
+                    </ul>
+                </div>
+                <div id="sendMessageList">
+                </div>
+                <div id="receiveMessageList" style="display: none"></div>
+            </div>
             </div>
         </div>
     </div>
 {% endblock %}
 {% block script %}
     <script>
+        var slideofState = 0
+        var addstatus = 0
+        var addFriendstatus = 0
+        var addWishstatus = 0
+        var otherid;
+        var userid = "{{userid}}"
+        var rack = $("#bookRack")
+        var myboard = $("#myboard")
+        var mybooklist = $("#mybooklist")
+        function getFilterRackHandle() {
+            getRack('filter',$("#bookRack"))
+        }
+        function toSendMessageList() {
+            $("#receiveMessageList").css('display','none')
+            $("#sendMessageList").css('display','block')
+            $.ajax({
+                url:"{% url 'getmessagelist' %}",
+                type:'get',
+                datatype:'json',
+                data:{'type':'beensent'},
+                success:function (data) {
+                    var sendmessagebox = $("#sendMessageList")
+                    sendmessagebox.empty()
+                    var friendsendlist = data.friendrequestlist
+                    var exchange_request_list = data.exchange_request_list
+                    for(var i =0;i<friendsendlist.length;i++) {
+                        var friendsendnode = $("<div class=\"messageItems\">\n" +
+                            "<p class=\"col-4\">申请类型:<span>"+friendsendlist[i].type+"</span></p>" +
+                            "<p class=\"col-3\">发送给<span >"+friendsendlist[i].receiver+"</span></p>" +
+                            "<p class=\"col-5 \" >发送时间:<span>"+friendsendlist[i].sendtime+"</span></p>\n" +
+                            "<p class=\"col-7\">附加信息:<span>"+friendsendlist[i].message+"</span></p>" +
+                            "<p class=\"col-3\" >当前状态:<span>"+friendsendlist[i].status+"</span></p>\n" +
+                            "<button class=\"layui-btn col-2\" type=\"button\" >撤回申请</button>\n" +
+                            "</div>")
+                        sendmessagebox.append(friendsendnode)
+                    }
+                    for(var i =0;i<exchange_request_list.length;i++) {
+                        var exchange_request_node = $("<div class=\"messageItems\">\n" +
+                            "<p class=\"col-4\">申请类型:<span>书籍交换</span></p>" +
+                            "<p class=\"col-3\">发送给:<span>"+exchange_request_list[i].receiver+"</span></p>" +
+                            "<p class=\"col-5 \" >发送时间:<span>"+exchange_request_list[i].sendtime+"</span></p>\n" +
+                            "<p class=\"col-12\" style='text-align: center'><span style='color: #2F4056;font-weight: bolder'>《"+exchange_request_list[i].bookb+"》</span><span class='icon iconfont icon-changjiantou-you'></span><span style='color:#2F4056;font-weight: bolder'>《"+exchange_request_list[i].booka+"》</span></p>" +
+                            "<p class=\"col-7\">附加信息:<span>"+exchange_request_list[i].message+"</span></p>" +
+                            "<p class=\"col-3\" >当前状态:<span>"+exchange_request_list[i].status+"</span></p>\n" +
+                            "<button class=\"layui-btn col-2\" type=\"button\" >撤回申请</button>\n" +
+                            "</div>")
+                        sendmessagebox.append(exchange_request_node)
+                    }
+                }
+            })
+        }
+        function toReceiveMessageList() {
+            $("#receiveMessageList").css('display','block')
+            $("#sendMessageList").css('display','none')
+            $.ajax({
+                url:"{% url 'getmessagelist' %}",
+                type:'get',
+                datatype:'json',
+                data:{'type':'received'},
+                success:function (data) {
+                    var receivemessagebox = $("#receiveMessageList")
+                    receivemessagebox.empty()
+                    var friendlist = data.friend_receive_list
+                    var exchangelist = data.exchange_receive_list
+                    for(var i =0;i<friendlist.length;i++) {
+                        var node = $("<div class=\"messageItems\">\n" +
+                            "<p class=\"col-4\">申请类型:<span>"+friendlist[i].type+"</span></p>" +
+                            "<p class=\"col-3\">来自:<span >"+friendlist[i].requester+"</span></p>" +
+                            "<p class=\"col-5 \" >发送时间:<span>"+friendlist[i].sendtime+"</span></p>\n" +
+                            "<p class=\"col-9\">附加信息:<span>"+friendlist[i].message+"</span></p>" +
+                            "<div class='layui-btn-group col-3' style='text-align: right'> " +
+                            "<button class=\"layui-btn\" type=\"button\" >接受</button>\n" +
+                            "<button class=\"layui-btn\" type=\"button\" >拒绝</button></div>\n" +
+                            "</div>")
+                        receivemessagebox.append(node)
+                    }
+                    for(var i =0;i<exchangelist.length;i++) {
+                        var node = $("<div class=\"messageItems\">\n" +
+                            "<p class=\"col-4\">申请类型:<span>书籍交换</span></p>" +
+                            "<p class=\"col-3\">来自<span >"+exchangelist[i].requester+"</span></p>" +
+                            "<p class=\"col-5 \" >发送时间:<span>"+exchangelist[i].sendtime+"</span></p>\n" +
+                            "<p class=\"col-12\" style='text-align: center'><span style='color: #2F4056;font-weight: bolder'>《"+exchangelist[i].bookb+"》</span><span class='icon iconfont icon-changjiantou-you'></span><span style='color:#2F4056;font-weight: bolder'>《"+exchangelist[i].booka+"》</span></p>" +
+                            "<p class=\"col-9\">附加信息:<span>"+exchangelist[i].message+"</span></p>" +
+                            "<div class='layui-btn-group col-3' style='text-align: right'><button class=\"layui-btn\" type=\"button\" >接受</button>\n" +
+                            "<button class=\"layui-btn\" type=\"button\" >拒绝</button></div>" +
+                            "</div>")
+                        receivemessagebox.append(node)
+                    }
+                }
+            })
+        }
+        function toMessageBox() {
+            clearContent()
+            $("#messageBox").css('display','block')
+            toSendMessageList()
+        }
+        function canelAddFriend() {
+            $("#canelAddFriend,#addFriendText").css('display','none')
+            $("#btnAddFriend").text("添加好友+")
+            addFriendstatus=0
+        }
+        function addFriend() {
+            if(addFriendstatus===0){
+                $("#canelAddFriend,#addFriendText").css('display','inline-block')
+                $("#btnAddFriend").text("发送申请")
+                addFriendstatus=1
+            }
+            else {
+                $.ajax({
+                    url:"{% url 'addfriend'%}",
+                    type:'post',
+                    datatype:'json',
+                    data:{'id':otherid,'message':$("#addFriendText").val()},
+                    success:function (data) {
+                        popMessage(data.status)
+                    }
+                })
+                $("#canelAddFriend,#addFriendText").css('display','none')
+                $("#btnAddFriend").text("已申请").attr('disabled','true')
+                addFriendstatus=0
+            }
+        }
+        function getmyRack() {
+            clearContent()
+            $("#myrack").css('display','block')
+            getRack(userid,mybooklist)
+        }
+        function toLeaveBoard() {
+            clearContent()
+            myboard.css('display','block')
+            getLeaveBoard(userid,myboard)
+        }
+        function addBook() {
+            $("#mybooklist .nullnode").remove()
+            layer.open({
+                type:1,
+                title:'添加书籍',
+                skin:'layui-layer-molv',
+                area:['520px','500px'],
+                content:"<form enctype=\"multipart/form-data\" id='addBookForm'>" +
+                    "<h3 style='text-align: center;margin: 30px 0px'>填写书籍信息</h3>"+
+                    "<div class='form-group'>" +
+                    "<div class='col-sm-3 custom-control-label' style='display: inline-block;text-align: center'><label for='author'>书名</label></div>" +
+                    "<div class='col-sm-8' style='display: inline-block'><input  required='required'  class='form-control' type='text' name='title' id='title'></div>" +
+                    "</div>" +
+                    "<div class='form-group'>" +
+                    "<div class='col-sm-3 custom-control-label' style='display: inline-block;text-align: center'><label for='author'>作者</label></div>" +
+                    "<div class='col-sm-8' style='display: inline-block'><input required='required'  class='form-control' type='text' name='author' id='author'></div>" +
+                    "</div>" +
+                    "<div class='form-group'>" +
+                    "<div class='col-sm-3 custom-control-label' style='display: inline-block;text-align: center'><label for='cover'>书籍封面</label></div>" +
+                    "<div class='col-sm-8' style='display: inline-block'><input  type='file' name='cover' id='cover'></div>" +
+                    "</div>" +
+                    "<div class='form-group'>" +
+                    "<div class='col-sm-3 custom-control-label' style='display: inline-block;text-align: center'><label for='press'>出版社</label></div>" +
+                    "<div class='col-sm-8' style='display: inline-block'><input  class='form-control'  type='text' name='press' id='press'></div>" +
+                    "</div>" +
+                    "<div class='form-group'>" +
+                    "<div class='col-sm-3 custom-control-label' style='display: inline-block;text-align: center;vertical-align: top'><label for='intro'>书籍简介</label></div>" +
+                    "<div class='col-sm-8' style='display: inline-block'><textarea  class='form-control'  type='text' name='intro' id='intro' maxlength='100'></textarea></div>" +
+                    "</div>",
+                    btn: ['提交','取消'],
+                    btnAlign:'c',
+                    yes:function (index, layero) {
+                        var formdata=new FormData($("#addBookForm")[0])
+                        $.ajax({
+                            url:"{% url 'addbook'%}",
+                            type:'post',
+                            datatype:'json',
+                            data:formdata,
+                            cache: false,
+                            processData: false,
+                            contentType: false,
+                            success:function (data) {
+                                console.log(data)
+                                popMessage(data.status)
+                                layer.close(index)
+                            }
+                        })
+                    }
+            })
+        }
+        function getmyWish() {
+            clearContent()
+            $("#mywish").css('display','block')
+            $.ajax({
+                url:"{% url 'getwishlist'%}"
+                ,type:"get"
+                ,datatype:"JSON"
+                ,success:function(data) {
+                    var wishlist = data.wishlist
+                    var listbox = $("#mywishlist")
+                    listbox.empty()
+                    if (wishlist.length !== 0) {
+                        for (var j = 0, len = wishlist.length; j < len; j++) {
+                            var ele = $("<div class='books card'></div>")
+                            var name = $(buildHTML("p", wishlist[j].title, {
+                                "class": "name-rack"
+                            }));
+                            var author = $(buildHTML("p", wishlist[j].author, {
+                                "class": "author-rack"
+                            }));
+                            var cover = $(buildHTML("img", {
+                                "src": "/static/covers/defaultcover.jpg" ,
+                                "class": "covers-rack card-img-top"
+                            }))
+                            ele.append(cover)
+                            ele.append(name);
+                            ele.append(author);
+                            listbox.append(ele);
+                        }
+                    } else {
+                        var nulltext = $(buildHTML('p','暂无书籍',{
+                            'class':'nullnode'
+                        }))
+                        listbox.append(nulltext)
+                    }
+                }
+            })
+        }
+        function addWishForm() {
+            $("#mywishlist .nullnode").remove()
+            if(addWishstatus===0){
+                $("#addWishForm").slideToggle()
+                $("#addWishBtn").attr('class','layui-btn layui-btn-danger').text('取消添加')
+                addWishstatus =1
+            }
+            else if (addWishstatus===1){
+                $("#addWishForm").slideToggle()
+                $("#addWishBtn").attr('class','layui-btn layui-btn-normal').text('添加愿望')
+                $("#wishTitle,#wishAuthor").val("")
+                addWishstatus =0
+            }
+        }
+        function sureAddWish() {
+            $.ajax({
+                url:"{% url 'addwish'%}",
+                type:'post',
+                data:{'title':$("#wishTitle").val(),'author':$("#wishAuthor").val()},
+                datatype:'json',
+                success:function (data) {
+                    if(data.status==="添加完成"){
+                        popMessage(data.status)
+                        addWishForm()
+                        addWishstatus =0
+                    }
+                    else {
+                        popMessage(data.status)
+                    }
+                }
+            })
+        }
+        function postMessageToUser(){
+            if($("#postContent").val()===""){
+                popMessage("请输入留言内容")
+            }
+            else {$.ajax(
+                {
+                    url:"{% url 'sendleavemessage' %}",
+                    datatype:'json',
+                    type:'post',
+                    data:{'message':$("#postContent").val(),'userid':otherid,csrfmiddlewaretoken: '{{ csrf_token  }}'},
+                    success:function(data){
+                        m = $("<li>\n" +
+                            "            <div>"+data.leaver+" <span>发表于"+data.sendtime+"</span></div>\n" +
+                            "            <p>"+data.message+"</p>\n" +
+                            "            <hr>\n" +
+                            "        </li>")
+                        $("#messageContent .nullnode").remove()
+                        $("#messageContent").append(m)
+                        $("#postContent").val("")
+                        btnSlide()
+                        popMessage("留言成功")
+                    }
+                }
+            )}
+        }
+        function btnSlide() {
+            if(slideofState===0){
+                $("#messagePost").animate({bottom:'+=190px'});
+                slideofState = 1;
+            }
+            else{
+                $("#messagePost").animate({bottom:'-=190px'});
+                slideofState = 0;
+            }
+        }
+        function clearOther() {
+            $("#otherInfo,#otherRack,#otherMessageBoard").css('display','none')
+        }
+        function toOtherInfo() {
+            clearOther()
+            $("#otherInfo").css('display','block')
+        }
+        function toOtherRack() {
+            clearOther()
+            $("#otherRack").css('display','flex')
+        }
+        function toOtherMessage() {
+            clearOther()
+            $("#otherMessageBoard").css('display','flex')
+        }
         function clearContent() {
             $("#mainContent .w").children().css("display","none")
+        }
+        function renderOtherInfo(userid) {
+            $.ajax(
+                {
+                    url: "/getuserdata/"+userid+"/",
+                    type:'get',
+                    datatype:'json',
+                    success:function (data) {
+                        console.log(data)
+                        if(data.isfriend==="yes"||data.isself ==="yes"){
+                            $("#btnAddFriend").css('display','none')
+                        }
+                        else if (data.isrequesting=="yes"){
+                            $("#btnAddFriend").text('已申请').attr('disabled','true')
+                        }
+                        else {
+                            $("#btnAddFriend").css('display','inline-block')
+                        }
+                        var labellistnode = $("#labellist")
+                        var wishlistnode = $("#wishlist")
+                        var labellist = data.labellist
+                        var wishlist = data.wishlist
+                        labellistnode.empty()
+                        wishlistnode.empty()
+                        $("#otherName>span").text(data.username)
+                        $("#otherEmail>span").text(data.email)
+                        $("#otherPos>span").text(data.city+"   "+data.school)
+                        $("#otherGrade>span").text(data.grade)
+                        if(labellist.length===0){
+                            var nulltext = $(buildHTML('p','该用户未添加标签',{
+                                'style':'margin:20px auto 40px;text-align:center;font-size:23px'
+                            }))
+                            labellistnode.append(nulltext)
+                        }
+                        else {for(i = 0;i<labellist.length;i++){
+                            var labelele=$("<div class=\"alert alert-primary\" role=\"alert\"> "+labellist[i]+"</div>")
+                            labellistnode.append(labelele)
+                            }}
+                        if(wishlist.length===0){
+                            var nulltext = $(buildHTML('p','愿望单暂无书籍',{
+                                'style':'margin:20px auto 40px;text-align:center;font-size:23px'
+                            }))
+                            wishlistnode.append(nulltext)
+                        }
+                        else {for(j=0;j<wishlist.length;j++){
+                            var wishele=$("<div class=\"alert alert-success\" role=\"alert\">\n" +
+                                 "《"+wishlist[j].title+"》"+wishlist[j].author+
+                                "</div>")
+                            console.log(wishele)
+                            wishlistnode.append(wishele)
+                        }}
+                    }
+                }
+            )
+        }
+        function getLeaveBoard(userid,boardele) {
+            $.ajax({
+                url:'/getuserleaveboard/'+userid+"/",
+                type:'get',
+                datatype:"json",
+                success:function (data){
+                    boardele.empty()
+                    var list = data.messagelist
+                    if(list.length===0){
+                        var nulltext = $(buildHTML('p','暂无留言',{
+                            'class':'nullnode'
+                        }))
+                        boardele.append(nulltext)
+                    }
+                    else {
+                        for (i = 0; i < list.length; i++) {
+                            var ele = $("<li>\n" +
+                                "  <div class='messageRecord'> <i class='layui-icon layui-icon-username'></i>" + list[i].leaver + " <span>发表于" + list[i].sendtime + "</span></div>\n" +
+                                "  <p>" + list[i].content + "</p>" +
+                                "<div class=\"layui-btn-group\" style='text-align: right;display: block'>\n" +
+                                "  <button class=\"layui-btn layui-btn-sm\">\n" +
+                                "    <i class='layui-icon layui-icon-reply-fill'></i>(0)\n" +
+                                "  </button>\n" +
+                                "  <button class=\"layui-btn layui-btn-sm\">\n" +
+                                "    <i class='layui-icon layui-icon-praise'></i>(0)\n" +
+                                "  </button>\n" +
+                                "</div></div>\n" +
+                                "</li>")
+                            boardele.append(ele)
+                        }
+                    }
+                }
+            })
+        }
+        function userPage(event) {
+            var page = $("#otherUser")
+            var userid = event.dataset.userid
+            otherid = userid
+            clearContent()
+            page.css('display','block').attr('data-id',userid)
+            getRack(page[0].dataset.id,$("#otherRack"))
+            renderOtherInfo(page[0].dataset.id,$("#otherInfo"))
+            getLeaveBoard(userid,$("#messageContent"))
+            toOtherInfo()
+        }
+        function popMessage(txt) {
+            $("#popmessage").remove()
+            var txtele = $("<div id=\'popmessage\' >"+txt+"</div>")
+            $('body').append(txtele)
+            setTimeout(function () {
+                $("#popmessage").fadeOut();
+            },1000);
+        }
+        function addlabel(){
+            if(addstatus===0) {
+                $("#labeltxt,#canelAdd").css('visibility', 'visible')
+                $("#addLabelBtn").text('确认添加').className='btn btn-success'
+                addstatus = 1
+            }
+            else {
+                if(!$("#labeltxt").val()){
+                    message("请输入要添加的标签文本")
+                }
+                else {
+                    var txtnode=$("#labeltxt")
+                    $.ajax(
+                        {
+                            url:"{% url 'addlabel' %}",
+                            data:{'label':txtnode.val(),csrfmiddlewaretoken:'{{csrf_token}}'},
+                            datatype:'json',
+                            type:'post',
+                            success:function (data) {
+                                console.log(data.status)
+                                if(data.status === 'OK'){
+                                    popMessage('添加成功')
+                                    $("#mylabel").append(" <dd class=\"alert alert-primary\">"+txtnode.val()+"</dd>")
+                                    txtnode.val("")
+                                }
+                            }
+                        }
+                    )
+                    $("#labeltxt,#canelAdd").css('visibility', 'hidden')
+                    $("#addLabelBtn").text('添加标签+').className='btn btn-primary'
+
+                }
+            }
+        }
+        function canelAdd() {
+            $("#labeltxt,#canelAdd").css('visibility', 'hidden')
+            $("#addLabelBtn").text('添加标签+').className='btn btn-primary'
+            addstatus=0
         }
         function userinfoHandle() {
             clearContent()
             $("#userInfo").css("display","block")
         }
         function personalList() {
-            $("#personalNav").slideToggle();
+            $("#personalNav").slideDown();
         }
         function searchUser() {
             $("#friendsList").css("display","none");
@@ -168,12 +853,11 @@
                 datatype:'json',
                 data:{'searchtxt':$('#usersearch').val(),csrfmiddlewaretoken: '{{ csrf_token  }}'},
                 success:function (data) {
-
                     for (u in data){
-                        l = $('<li data-userid='+u+'> <span class="iconfont icon-yonghu"></span>  '+data[u]+'</li>')
+                        var l = $('<li data-userid='+u+' onclick="userPage(this)"> <span class="iconfont icon-yonghu"></span>  '+data[u]+'</li>')
+
                         $("#searchList").append(l)
                     }
-
                 }
                 })
         }
@@ -186,29 +870,74 @@
         }
         function schoolRackHandle(){
             $("#personalNav").slideUp();
-            getRack('school');
+            clearContent()
+            rack.css('display','flex')
+            getRack('school',rack);
         }
         function cityRackHandle(){
             $("#personalNav").slideUp();
-            getRack('city')
+            clearContent()
+            rack.css('display','flex')
+            getRack('city',rack)
         }
         function InitRack() {
                 cityRackHandle()
         }
         InitRack();
-
-        function getRack(type){
-            clearContent()
-            $("#bookRack").css("display","inline-block")
-            racktype = type
+        function getRack(type,bookrack){
+            /*这个函数取得一个存有书的id,书名，作者的字典，格式为{id:{name:name,author:author}}
+                然后将书架渲染到传入的div中
+                渲染格式为div#bookbox>(div#id>span+span)*n
+                两个span分别存放书名和作者，div的id就是书的id
+                再给这些元素添加onclick事件，点击打开一个layer用于展示这本书的详细信息*/
+            var racktype = type
+            console.log(racktype)
             $.ajax({
                 url:"{% url 'getrack'%}"
-                ,type:racktype == 'filter' ? "post":"get"
+                ,type:racktype === 'filter' ? "post":"get"
                 ,datatype:"JSON"
-                ,data:racktype == 'filter' ? $('#filterform').serialize():{"racktype":racktype}
-                ,success:function(data){
-                        renderRack(data.books);
+                ,data:racktype === 'filter' ? $('#filterform').serialize():{"racktype":racktype}
+                ,success:function(data) {
+                    var owner = data.owner
+                    var books = data.books
+                    bookrack.empty()
+                    console.log(data)
+                    if (books.length !== 0) {
+                        for (var j = 0, len = books.length; j < len; j++) {
+                            var ele = $("<div class='books card' data-bookid=" + books[j].id + "></div>")
+                            var name = $(buildHTML("p", books[j].name, {
+                                "class": "name-rack"
+                            }));
+                            var author = $(buildHTML("p", books[j].author, {
+                                "class": "author-rack"
+                            }));
+                            var cover = $(buildHTML("img", {
+                                "src": "/static/covers/" + books[j].cover,
+                                "class": "covers-rack card-img-top"
+                            }))
+                            ele.append(cover);
+                            ele.append(name);
+                            if (books[j].owner === "{{userdata.用户名}}" && books[j].unread != 0) {
+                                var unread = $('<span class="badge badge-danger" style="position: absolute;top: 140px;right: 0px">' + books[j].unread + "未读</span>")
+                                name.append(unread)
+                            }
+                            ele.append(author);
+                            ele.click(
+                                (function (id) {
+                                    var bookid = id;
+                                    return function () {
+                                        showBookLayer(bookid)
+                                    }
+                                })(books[j].id));
+                            bookrack.append(ele);
                         }
+                    } else {
+                        var nulltext = $(buildHTML('p','暂无书籍',{
+                            'class':'nullnode'
+                        }))
+                        bookrack.append(nulltext)
+                    }
+                }
             })}
         buildHTML = function(tag, html, attrs) {
             // you can skip html param
@@ -223,67 +952,17 @@
             }
             return h += html ? ">" + html + "</" + tag + ">" : "/>";
         };
-        function renderRack(books){
-                /*这个函数取得一个存有书的id,书名，作者的字典，格式为{id:{name:name,author:author}}
-                然后将书架渲染到id=bookbox的div中
-                渲染格式为div#bookbox>(div#id>span+span)*n
-                两个span分别存放书名和作者，div的id就是书的id
-                再给这些元素添加onclick事件，点击打开一个layer用于展示这本书的详细信息*/
-            $("#bookbox").empty()
-            for(var book in books){
-                var ele = $("<div class='books card' data-bookid="+book+"></div>")
-                var name = $(buildHTML("p",books[book].name,{
-                        "class": "name-rack"
-                 }));
-                var author = $(buildHTML("p",books[book].author,{
-                        "class": "author-rack"
-                 }));
-                var cover = $(buildHTML("img",{
-                    "src":"/static/covers/"+books[book].cover,
-                    "class": "covers-rack card-img-top"
-                 }))
-                ele.append(cover);
-                ele.append(name);
-                ele.append(author);
-
-                ele.click(
-                    (function(id){
-                    var bookid=id;
-                    return function(){
-                        showBookLayer(bookid)
-                    }
-                })(book));
-                $("#bookbox").append(ele);
-            }
-        }
         function showBookLayer(id){
-            $.ajax({
-                url:'{% url "showbook" %}'
-                ,type:'get'
-                ,datatype:'JSON'
-                ,data:{'id':id}
-                ,success:function (book) {
-                    var booklayer = "<div id=\"booklayer\">\n" +
-                        "<div id=\"title\"><p>"+book.name+"</p></div>\n" +
-                        "<div id=\"author\"><p>"+book.author+"</p></div>\n" +
-                        "<div id=\"cover\">" +
-                        "<img style='width: 30%;height: 30%;' " +
-                        "src=\"/static/covers/"+book.cover+"\"alt=\"#\"></div>\n" +
-                        "<div id=\"press\"><p>"+book.press+"</p></div>\n" +
-                        "<div id=\"intro\"><label>简介</label><p>"+book.intro+"</p></div>\n" +
-                        "<div id=\"owner\" ><label>持有人</label><p>"+book.owner+"</p></div>\n" +
-                        "<div id=\"position\"><label>所在地</label><p>"+book.city+"  "+book.school+"</p></div>\n" +
-                        "</div>"
                     parent.layer.open(
                         {
-                            type:1,
-                            content:booklayer,
-                            area: ['500px', '600px']
+                            skin:'layui-layer-molv',
+                            type:2,
+                            content:"/booklayer/"+id+"/",
+                            area: ['500px', '610px'],
+                            title:false,
+                            scroll:false
                         }
                     )
-
-                }
-            })
         }
         function goCenter() {
             clearContent()

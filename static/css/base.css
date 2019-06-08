@@ -8,8 +8,7 @@ form,input,p,th,td {
 }
 body {
     cursor: default;
-    background:url("/static/blog/img/background.jpg")  no-repeat;
-    background-size: 100% 100%;
+    background-color: #bfd2f0;
     height: 1000px;
 }
 a {
@@ -97,13 +96,14 @@ a {
     font-size: 10px;
     margin-left: 10px;
 }
-#bookbox {
+#bookRack {
     display: flex;
 }
 .books {
     transition: 0.15s;
     margin: 10px 10px 0px 20px;
     padding: 3px;
-    box-shadow: #202326 1px 1px 1px
+    box-shadow: #202326 1px 1px 1px;
+    height: 200px;
 }
 
